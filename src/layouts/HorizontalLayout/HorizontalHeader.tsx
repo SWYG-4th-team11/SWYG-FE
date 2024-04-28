@@ -8,7 +8,7 @@ const HeaderContainer = styled.header(({ theme }) => ({
   alignItems: 'center',
   width: '100%',
   height: '86px',
-  backgroundColor: theme.colors.white, // 이 부분은 테마의 색상 값을 참조합니다.
+  backgroundColor: theme.colors.white,
 }));
 
 const Wrapper = styled.div`
@@ -22,7 +22,7 @@ const Wrapper = styled.div`
 const LogoAndIntro = styled.div`
   display: flex;
   align-items: center;
-  font-size: 1rem; // 실제 필요한 크기로 조정하세요.
+  font-size: 1rem;
   width: 770px;
 `;
 
@@ -42,11 +42,11 @@ const LoginButton = styled.button(({ theme }) => ({
   background: `${theme.colors.white}`,
   color: `${theme.colors.green[0]}`,
   cursor: 'pointer',
-  fontSize: `${theme.typography.text4.fontSize}px`, // 테마에서 fontSize 가져오기
-  fontWeight: theme.typography.text4.fontWeight, // 테마에서 fontWeight 가져오기
-  lineHeight: `${theme.typography.text4.lineHeight}px`, // 테마에서 lineHeight 가져오기
+  fontSize: `${theme.typography.text4.fontSize}px`,
+  fontWeight: theme.typography.text4.fontWeight,
+  lineHeight: `${theme.typography.text4.lineHeight}px`,
   '&:hover': {
-    background: theme.colors.green[0], // 테마의 색상을 사용
+    background: theme.colors.green[0],
     color: theme.colors.white,
   },
 }));
@@ -56,9 +56,9 @@ const HorizontalHeader = () => (
     <Wrapper>
       <LogoAndIntro>
         <Image
-          src="/headerLogo.svg" // public 폴더의 경로로 설정
-          alt="Header Logo" // 적절한 alt 텍스트를 제공
-          width={158} // 실제 이미지의 크기에 맞게 조정
+          src="/headerLogo.svg"
+          alt="Header Logo"
+          width={158}
           height={86}
         />
         <Menu>서비스 소개</Menu>
