@@ -8,6 +8,7 @@ interface Typography {
 
 export interface Theme extends EmotionTheme {
   colors: {
+    white: string;
     gray: string[];
     green: string[];
     sub: {
@@ -30,6 +31,7 @@ export interface Theme extends EmotionTheme {
 
 export const theme: Theme = {
   colors: {
+    white: '#ffffff',
     gray: [
       '#191919',
       '#353535',
