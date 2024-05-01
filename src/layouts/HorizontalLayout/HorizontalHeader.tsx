@@ -1,6 +1,7 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
+import { useRouter } from 'next/router';
 
 const HeaderContainer = styled.header(({ theme }) => ({
   display: 'flex',
@@ -51,21 +52,27 @@ const LoginButton = styled.button(({ theme }) => ({
   },
 }));
 
-const HorizontalHeader = () => (
-  <HeaderContainer>
-    <Wrapper>
-      <LogoAndIntro>
-        <Image
-          src="/headerLogo.svg"
-          alt="Header Logo"
-          width={158}
-          height={86}
-        />
-        <Menu>서비스 소개</Menu>
-      </LogoAndIntro>
-      <LoginButton>로그인</LoginButton>
-    </Wrapper>
-  </HeaderContainer>
-);
+const HorizontalHeader = () => {
+  const router = useRouter();
+  const onLoginPage = () => {
+    router.push('/login');
+  };
+  return (
+    <HeaderContainer>
+      <Wrapper>
+        <LogoAndIntro>
+          <Image
+            src="/headerLogo.svg"
+            alt="Header Logo"
+            width={158}
+            height={86}
+          />
+          <Menu>서비스 소개</Menu>
+        </LogoAndIntro>
+        <LoginButton onClick={onLoginPage}>로그인</LoginButton>
+      </Wrapper>
+    </HeaderContainer>
+  );
+};
 
 export default HorizontalHeader;
