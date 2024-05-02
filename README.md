@@ -6,26 +6,18 @@
 - develop
 - master
 
-## 파일 구조
+### 실행 방법 순서대로
 
-SRC
-├── components (각종 컴포넌트)
-│ └── common
-├── constants (상수)
-├── hooks
-│ ├── reactQueryHooks
-│ └── useMediaQuery
-├── layouts
-│ ├── HorizontalLayout
-│ ├── MobileLayout
-│ └── ResponsiveLayout
-├── pages
-│ └── api
-├── providers
-│ ├── LayoutProvider
-│ └── ReactQueryProvider
-├── store
-│ └── common
-├── styles
-├── types
-└── utils
+(사전에 yarn 필수)
+
+- git clone {주소}
+- yarn
+- checkout master
+- yarn dev
+
+#### 현재 완료 페이지
+
+- localhost:3000/join (회원가입)
+- localhost:3000/login (로그인)
+- localhost:3000/serviceInformation (서비스설명)
+- localhost:3000/start (시작화면)
