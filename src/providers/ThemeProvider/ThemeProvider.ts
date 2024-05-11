@@ -39,7 +39,7 @@ export const theme: Theme = {
       '#F2F2F2',
       '#F8F8F8',
     ],
-    green: ['#03C75A', '#96BA9E', '#DCF5DC'],
+    green: ['#03C75A', '#96BA9E', '#DCF5DC', '#EBF6EB'],
     sub: {
       yellow: '#C0A234',
       lightYellow: '#FFF5D1',
