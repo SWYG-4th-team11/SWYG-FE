@@ -82,6 +82,22 @@ const ModalButtonNo = styled.button`
   border: none;
   cursor: pointer;
 `;
+const InputTitle = styled.div<{ theme: Theme }>`
+  display: flex;
+  justify-content: flex-start;
+  font-size: ${({ theme }) => theme.typography.title2.fontSize};
+  font-weight: ${({ theme }) => theme.typography.title2.fontWeight};
+  margin-bottom: 10px;
+`;
+const InputDetail = styled.input<{ theme: Theme }>`
+  display: flex;
+  width: 100%;
+  height: 40px;
+  background-color: ${({ theme }) => theme.colors.gray[4]};
+  border: none;
+  margin-bottom: 20px;
+  padding-left: 10px;
+`;
 const Mission = () => {
   const theme = useTheme() as Theme;
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -96,6 +112,10 @@ const Mission = () => {
   return (
     <Main>
       <MainModal isOpen={isModalOpen} onClose={closeModal}>
+        <InputTitle theme={theme}>목표 이름</InputTitle>
+        <InputDetail theme={theme} placeholder="15자 이내로 입력해주세요." />
+        <InputTitle theme={theme}>메모(필수x)</InputTitle>
+        <InputDetail theme={theme} placeholder="메모를 입력해주세요." />
         <ModalButtonYes theme={theme}>수정완료</ModalButtonYes>
         <ModalButtonNo>삭제하기</ModalButtonNo>
       </MainModal>
