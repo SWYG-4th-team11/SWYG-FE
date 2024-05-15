@@ -69,7 +69,7 @@ const MandartHeader = () => {
         </MainText>
       </TitleText>
       <MyFavorite>
-        <MyFavoriteItem theme={theme}>#디자인</MyFavoriteItem>
+        {/* <MyFavoriteItem theme={theme}>#디자인</MyFavoriteItem> */}
       </MyFavorite>
     </Main>
   );
