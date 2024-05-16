@@ -55,9 +55,6 @@ export const useCustomQuery = <TData, TVariables>(
 
 // customMutation
 
-// TData: API 응답 타입
-// TVariables: 요청 시 전달되는 변수의 타입
-// TError: 에러 타입 (옵션)
 export const useCustomMutation = <TData, TVariables, TError = Error>(
   method: 'get' | 'post' | 'put' | 'patch' | 'delete',
   url: UrlBuilder<TVariables> | string,
@@ -65,6 +62,6 @@ export const useCustomMutation = <TData, TVariables, TError = Error>(
 ) =>
   useMutation<TData, TError, TVariables>({
     ...options,
-    mutationFn: (variables?: TVariables) =>
+    mutationFn: (variables: TVariables) =>
       fetcher<TData, TVariables>(method, url, variables),
   });

@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
-import { useRouter } from 'next/router';
-import { NextButton } from '../common/Button';
 
 const Container = styled.div`
   width: 356px;
@@ -15,7 +13,7 @@ const Container = styled.div`
 `;
 const Title = styled.div`
   text-align: center;
-  width: 107px;
+  width: 300px;
   height: 155px;
   gap: 12px;
 `;
@@ -28,29 +26,30 @@ const Text = styled.div(({ theme }) => ({
 }));
 
 const Description = styled.div(({ theme }) => ({
-  width: '356px',
+  marginTop: '20px',
   height: '68px',
+  width: '660px',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  textAlign: 'center',
   fontSize: theme.typography.title1.fontSize,
   fontWeight: theme.typography.title1.fontWeight,
   lineHeight: `${theme.typography.title1.lineHeight}px`,
 }));
 
-const JoinResult = () => {
-  const router = useRouter();
-  const handleJoin = () => {
-    router.push('/login');
-  };
-  return (
-    <Container>
-      <Title>
-        <Image src="/checkGreen.svg" alt="체크" width={107} height={107} />
-        <Text>가입완료</Text>
-      </Title>
-      <Description>11팀님, 환영합니다.</Description>
+const PasswordResult = () => (
+  <Container>
+    <Title>
+      <Image src="/checkGreen.svg" alt="체크" width={107} height={107} />
+      <Text>비밀번호 변경 완료</Text>
+    </Title>
+    <Description>
+      비밀번호 변경이 완료되었습니다.
+      <br />
+      새로운 비밀번호로 로그인 해주세요!
+    </Description>
+  </Container>
+);
 
-      <NextButton onClick={handleJoin}>로그인 화면으로 돌아가기</NextButton>
-    </Container>
-  );
-};
-
-export default JoinResult;
+export default PasswordResult;
