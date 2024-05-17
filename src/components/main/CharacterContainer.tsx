@@ -4,7 +4,7 @@ import { useTheme } from '@emotion/react';
 import { Theme } from '@/providers/ThemeProvider/ThemeProvider';
 import Bubble from './Bubble';
 import ImgManda from '../../../public/image/ImgManda.svg';
-import { GetQuote } from '@/pages/api/main/test';
+import { GetCharacter, GetQuote } from '@/pages/api/main/test';
 
 interface ITest {
   width: number;
@@ -91,28 +91,38 @@ const StatusText = styled.div<{ theme: Theme }>`
 `;
 const CharacterContainer = () => {
   const theme = useTheme() as Theme;
-
+  const id = Number(localStorage.getItem('id'));
   const { data: QuoteData } = GetQuote();
-  console.log('QuoteData', QuoteData);
-
+  const { data: CharacterData } = GetCharacter(id);
+  console.log(CharacterData);
+  const getCharcterTitle = (level: number) => {
+    if (level === 1) return '씨앗';
+    if (level === 2) return '새싹';
+    if (level === 3) return '줄기';
+    if (level === 4) return '꽃';
+    return '나무';
+  };
   return (
     <Main>
       <CharacterDiv>
         <Bubble>
-          {`가장 어려운 일을 하는 것은 시작하는 것이다.
-나머지는 자연스럽게 따라온다. 2줄까지 작성가능`}
+          {QuoteData?.content ? QuoteData.content : '시작이 반이다'}
         </Bubble>
         <Image src={ImgManda} alt="character" />
       </CharacterDiv>
       <CharacterStatus>
         <Status>
-          <Level theme={theme}>LV 1</Level>
-          <LevelName theme={theme}>씨앗</LevelName>
+          <Level theme={theme}>{`LV ${CharacterData?.[0]?.level ?? 0}`}</Level>
+          <LevelName theme={theme}>
+            {getCharcterTitle(CharacterData?.[0]?.level || 0)}
+          </LevelName>
         </Status>
         <ProgressBar theme={theme}>
           <Progress width={100 - (4 * 100) / 6} theme={theme} />
         </ProgressBar>
-        <StatusText theme={theme}>레밸업까지 목표달성 3/6</StatusText>
+        <StatusText theme={theme}>
+          {`레밸업까지 목표달성 ${CharacterData?.[0]?.exp ?? 0}/6`}
+        </StatusText>
       </CharacterStatus>
     </Main>
   );
