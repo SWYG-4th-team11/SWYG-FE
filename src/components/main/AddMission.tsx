@@ -5,6 +5,8 @@ import Image from 'next/image';
 import { Theme } from '@/providers/ThemeProvider/ThemeProvider';
 import IcoClose from '../../../public/image/IcoClose.svg';
 import MainModal from './MainModal';
+import { useCustomMutation } from '@/hooks/reactQueryHooks/reactQueryHooks';
+import { GetCharacter } from '@/pages/api/main/test';
 
 const Main = styled.div`
   display: flex;
@@ -71,16 +73,44 @@ const ModalButtonYes = styled.button<{ theme: Theme }>`
   margin-bottom: 8px;
   cursor: pointer;
 `;
-const AddMission = () => {
+interface MissionProps {
+  onChangeRoutine: () => void;
+}
+const AddMission = ({ onChangeRoutine }: MissionProps) => {
   const theme = useTheme() as Theme;
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [title, setTitle] = useState('');
+  const [memo, setMemo] = useState('');
+  const userId = Number(localStorage.getItem('id'));
+  const { data: CharacterData } = GetCharacter(userId);
+  const mandalartId = CharacterData?.[0]?.id ?? 0;
   const openModal = () => {
     setIsModalOpen(true);
   };
 
   const closeModal = () => {
     setIsModalOpen(false);
+  };
+  const { mutate: addRoutineMutate } = useCustomMutation(
+    'post',
+    '/routine/create',
+    {
+      onSuccess: () => {
+        onChangeRoutine();
+      },
+    }
+  );
+  const handleAddRoutine = () => {
+    addRoutineMutate({
+      title,
+      memo,
+      isChecked: false,
+      routineDate: new Date(),
+      userId,
+      mandalartId,
+    });
+
+    closeModal();
   };
   return (
     <Main>
@@ -93,10 +123,24 @@ const AddMission = () => {
           </CloseBtn>
         </ModalTitle>
         <InputTitle theme={theme}>목표 이름</InputTitle>
-        <InputDetail theme={theme} placeholder="15자 이내로 입력해주세요." />
+        <InputDetail
+          theme={theme}
+          placeholder="15자 이내로 입력해주세요."
+          onChange={(e) => {
+            setTitle(e.target.value);
+          }}
+        />
         <InputTitle theme={theme}>메모(필수x)</InputTitle>
-        <InputDetail theme={theme} placeholder="메모를 입력해주세요." />
-        <ModalButtonYes theme={theme}>수정완료</ModalButtonYes>
+        <InputDetail
+          theme={theme}
+          placeholder="메모를 입력해주세요."
+          onChange={(e) => {
+            setMemo(e.target.value);
+          }}
+        />
+        <ModalButtonYes theme={theme} onClick={handleAddRoutine}>
+          추가완료
+        </ModalButtonYes>
       </MainModal>
       <TextBox theme={theme} onClick={openModal}>
         + 오늘의 일정 추가하기

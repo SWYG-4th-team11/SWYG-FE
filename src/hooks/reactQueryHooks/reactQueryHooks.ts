@@ -45,7 +45,6 @@ export const useCustomQuery = <TData, TVariables>(
   options?: UseQueryOptions<TData>
 ) => {
   const queryKey = [url, JSON.stringify(variables)];
-
   return useQuery<TData>({
     queryKey,
     queryFn: () => fetcher('get', url, variables),

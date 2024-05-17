@@ -4,7 +4,7 @@ import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
 import AuthStore from '@/store/auth/authStore';
-import calculateDaysSince from '@/utils/\bdaysCalculate';
+import calculateDaysSince from '@/utils/daysCalculate';
 import { useCustomMutation } from '@/hooks/reactQueryHooks/reactQueryHooks';
 import { Api } from '@/utils/apis';
 

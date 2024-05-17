@@ -1,13 +1,16 @@
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import DatePicker from 'react-datepicker';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { useTheme } from '@emotion/react';
 import IcoCalender from '../../../public/image/IcoCalendar.svg';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Theme } from '@/providers/ThemeProvider/ThemeProvider';
 
-const TodayMission = () => {
+interface TodayMissionProps {
+  onNowDateChange: (date: Date) => void;
+}
+const TodayMission = ({ onNowDateChange }: TodayMissionProps) => {
   const DateMain = styled.div`
     display: flex;
     justify-content: space-between;
@@ -55,6 +58,9 @@ const TodayMission = () => {
   const openCalender = () => {
     setIsOpenCalender(!isOpenCalender);
   };
+  useEffect(() => {
+    onNowDateChange(startDate);
+  }, [startDate, onNowDateChange]);
   return (
     <DateMain>
       {isOpenCalender && (
