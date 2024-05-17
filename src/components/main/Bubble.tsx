@@ -27,6 +27,9 @@ const BubbleWrapper = styled.div`
   }
 `;
 const BubbleText = styled.div<{ theme: Theme }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
   font-size: ${({ theme }) => theme.typography.text4.fontSize};
   /* font-weight: ${({ theme }) => theme.typography.text4.fontWeight}; */
   font-weight: bold;
