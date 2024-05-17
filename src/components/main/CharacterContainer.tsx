@@ -137,6 +137,19 @@ const ModalButtonYes = styled.button<{ theme: Theme }>`
   margin-bottom: 8px;
   cursor: pointer;
 `;
+const ImageContainer = styled.div`
+  animation: moveUpDown 2s ease-in-out infinite;
+
+  @keyframes moveUpDown {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+`;
 const CharacterContainer = () => {
   const theme = useTheme() as Theme;
   const id = Number(localStorage.getItem('id'));
@@ -208,12 +221,14 @@ const CharacterContainer = () => {
         <Bubble>
           {QuoteData?.content ? QuoteData.content : '시작이 반이다'}
         </Bubble>
-        <Image
-          src={getImageManda(CharacterData?.[0]?.level || 0)}
-          alt="character"
-          width={200}
-          height={160}
-        />
+        <ImageContainer>
+          <Image
+            src={getImageManda(CharacterData?.[0]?.level || 0)}
+            alt="character"
+            width={200}
+            height={160}
+          />
+        </ImageContainer>
       </CharacterDiv>
       <CharacterStatus>
         <Status>
