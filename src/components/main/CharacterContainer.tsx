@@ -94,7 +94,7 @@ const CharacterContainer = () => {
   const id = Number(localStorage.getItem('id'));
   const { data: QuoteData } = GetQuote();
   const { data: CharacterData } = GetCharacter(id);
-  console.log(CharacterData);
+
   const getCharcterTitle = (level: number) => {
     if (level === 1) return '씨앗';
     if (level === 2) return '새싹';
