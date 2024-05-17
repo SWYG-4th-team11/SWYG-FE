@@ -2,9 +2,12 @@ import { useTheme } from '@emotion/react';
 import { useState } from 'react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
+import { useQueryClient } from '@tanstack/react-query';
 import { Theme } from '@/providers/ThemeProvider/ThemeProvider';
 import IcoMoreOption from '../../../public/image/IcoMoreOption.svg';
 import MainModal from './MainModal';
+import { IRoutine } from '@/pages/api/main/test';
+import { useCustomMutation } from '@/hooks/reactQueryHooks/reactQueryHooks';
 
 const Main = styled.div`
   display: flex-start;
@@ -98,10 +101,22 @@ const InputDetail = styled.input<{ theme: Theme }>`
   margin-bottom: 20px;
   padding-left: 10px;
 `;
-const Mission = () => {
+interface MissionProps {
+  data: IRoutine;
+  onChangeRoutine: () => void;
+}
+
+const Mission = ({ data, onChangeRoutine }: MissionProps) => {
   const theme = useTheme() as Theme;
   const [isModalOpen, setIsModalOpen] = useState(false);
-
+  const [id] = useState(data.id);
+  const [title, setTitle] = useState(data.title);
+  const [memo, setMemo] = useState(data.memo);
+  const [isChecked] = useState(data.isChecked);
+  const [routineDate] = useState(data.routineDate);
+  const [userId] = useState(data.userId);
+  const [mandalartId] = useState(data.mandalartId);
+  const queryClient = useQueryClient();
   const openModal = () => {
     setIsModalOpen(true);
   };
@@ -109,21 +124,91 @@ const Mission = () => {
   const closeModal = () => {
     setIsModalOpen(false);
   };
+  const { mutate: updateRoutineMutate } = useCustomMutation(
+    'put',
+    '/routine/update'
+  );
+  const handleUpdateRoutine = () => {
+    updateRoutineMutate({
+      id,
+      title,
+      memo,
+      isChecked,
+      routineDate,
+      userId,
+      mandalartId,
+    });
+    closeModal();
+  };
+  const { mutate: deleteRoutineMutate } = useCustomMutation(
+    'delete',
+    `/routine/${id}`,
+    {
+      onSuccess: () => {
+        onChangeRoutine();
+      },
+    }
+  );
+  const handleDeleteRoutine = () => {
+    deleteRoutineMutate({});
+    closeModal();
+  };
+  const { mutate: checkRoutineMutate } = useCustomMutation(
+    'put',
+    'routine/toggle-is-checked',
+    {
+      onSuccess: () => {
+        onChangeRoutine();
+        if (id !== undefined) {
+          const queryKey = [`/mandalart/userId/${id}`];
+          // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-expect-error
+          queryClient.invalidateQueries(queryKey);
+        }
+      },
+    }
+  );
+  const handleCheckRoutine = () => {
+    checkRoutineMutate({
+      routineId: id,
+      isChecked: !isChecked,
+    });
+  };
   return (
     <Main>
       <MainModal isOpen={isModalOpen} onClose={closeModal}>
         <InputTitle theme={theme}>목표 이름</InputTitle>
-        <InputDetail theme={theme} placeholder="15자 이내로 입력해주세요." />
+        <InputDetail
+          theme={theme}
+          placeholder="15자 이내로 입력해주세요."
+          defaultValue={title}
+          onChange={(e) => {
+            setTitle(e.target.value);
+          }}
+        />
         <InputTitle theme={theme}>메모(필수x)</InputTitle>
-        <InputDetail theme={theme} placeholder="메모를 입력해주세요." />
-        <ModalButtonYes theme={theme}>수정완료</ModalButtonYes>
-        <ModalButtonNo>삭제하기</ModalButtonNo>
+        <InputDetail
+          theme={theme}
+          placeholder="메모를 입력해주세요."
+          defaultValue={memo}
+          onChange={(e) => {
+            setMemo(e.target.value);
+          }}
+        />
+        <ModalButtonYes theme={theme} onClick={handleUpdateRoutine}>
+          수정완료
+        </ModalButtonYes>
+        <ModalButtonNo onClick={handleDeleteRoutine}>삭제하기</ModalButtonNo>
       </MainModal>
       <Item>
-        <CheckBox type="checkbox" />
+        <CheckBox
+          type="checkbox"
+          onClick={handleCheckRoutine}
+          defaultChecked={isChecked}
+        />
         <TextArea>
-          <MainText theme={theme}>잘 먹고 잘 살기</MainText>
-          <SubText theme={theme}>잘 먹는건 몹시 중요하다</SubText>
+          <MainText theme={theme}>{title}</MainText>
+          <SubText theme={theme}>{memo}</SubText>
         </TextArea>
         <Image
           src={IcoMoreOption}

@@ -40,3 +40,32 @@ export const GetCharacter = (userId: number) =>
     `/mandalart/userId/${userId}`,
     undefined
   );
+export interface IRoutine {
+  id: number;
+  title: string;
+  memo: string;
+  isChecked: boolean;
+  routineDate: string;
+  userId: number;
+  mandalartId: number;
+}
+
+export interface IRoutinesResponse {
+  routines: IRoutine[];
+}
+
+export interface IRoutineInput {
+  userId: number;
+  mandalartId: number;
+  routineDate: Date;
+}
+export const GetRoutines = (
+  userId: number,
+  mandalartId: number,
+  routineDate: Date
+) =>
+  useCustomQuery<IRoutine[], IRoutineInput>('/routine/view', {
+    userId,
+    mandalartId,
+    routineDate,
+  });

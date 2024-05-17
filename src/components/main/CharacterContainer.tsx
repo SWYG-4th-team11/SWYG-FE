@@ -87,6 +87,7 @@ const StatusText = styled.div<{ theme: Theme }>`
   font-size: ${({ theme }) => theme.typography.text4.fontSize};
   font-weight: ${({ theme }) => theme.typography.text4.fontWeight};
   color: ${({ theme }) => theme.colors.gray[3]};
+  margin-top: 10px;
   /* line-height: ${({ theme }) => theme.typography.text4.lineHeight}; */
 `;
 const CharacterContainer = () => {
@@ -112,16 +113,16 @@ const CharacterContainer = () => {
       </CharacterDiv>
       <CharacterStatus>
         <Status>
-          <Level theme={theme}>{`LV ${CharacterData?.[0]?.level ?? 0}`}</Level>
+          <Level theme={theme}>{`LV ${CharacterData?.[0]?.level}`}</Level>
           <LevelName theme={theme}>
             {getCharcterTitle(CharacterData?.[0]?.level || 0)}
           </LevelName>
         </Status>
         <ProgressBar theme={theme}>
-          <Progress width={100 - (4 * 100) / 6} theme={theme} />
+          <Progress width={CharacterData?.[0]?.exp ?? 0 / 100} theme={theme} />
         </ProgressBar>
         <StatusText theme={theme}>
-          {`레밸업까지 목표달성 ${CharacterData?.[0]?.exp ?? 0}/6`}
+          {`레밸업까지 목표달성 ${CharacterData?.[0]?.exp ?? 0}/100`}
         </StatusText>
       </CharacterStatus>
     </Main>
