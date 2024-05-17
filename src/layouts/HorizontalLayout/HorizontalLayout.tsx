@@ -1,5 +1,4 @@
 import styled from '@emotion/styled';
-import Footer from '@/components/common/Footer';
 import HorizontalHeader from './HorizontalHeader';
 
 interface HorizontalLayoutProps {
@@ -16,7 +15,6 @@ const VerticalLayout = ({ children }: HorizontalLayoutProps) => (
   <>
     <HorizontalHeader />
     <Wrapper>{children}</Wrapper>
-    <Footer />
   </>
 );
 
