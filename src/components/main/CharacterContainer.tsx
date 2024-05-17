@@ -4,6 +4,7 @@ import { useTheme } from '@emotion/react';
 import { Theme } from '@/providers/ThemeProvider/ThemeProvider';
 import Bubble from './Bubble';
 import ImgManda from '../../../public/image/ImgManda.svg';
+import { GetQuote } from '@/pages/api/main/test';
 
 interface ITest {
   width: number;
@@ -90,6 +91,10 @@ const StatusText = styled.div<{ theme: Theme }>`
 `;
 const CharacterContainer = () => {
   const theme = useTheme() as Theme;
+
+  const { data: QuoteData } = GetQuote();
+  console.log('QuoteData', QuoteData);
+
   return (
     <Main>
       <CharacterDiv>

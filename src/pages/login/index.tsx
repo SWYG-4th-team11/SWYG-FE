@@ -58,7 +58,7 @@ const Login = () => {
           nickname: data.detail.nickname,
           createdDateTime: data.detail.createdDateTime,
         });
-        router.push('/');
+        router.push('/main');
       }
     },
     onError: (error) => {
