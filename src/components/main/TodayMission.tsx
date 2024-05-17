@@ -4,6 +4,8 @@ import DatePicker from 'react-datepicker';
 import { useEffect, useRef, useState } from 'react';
 import { useTheme } from '@emotion/react';
 import IcoCalender from '../../../public/image/IcoCalendar.svg';
+import IcoArrowLeft from '../../../public/image/IcoArrowLeft.svg';
+import IcoArrowRight from '../../../public/image/IcoArrowRight.svg';
 import 'react-datepicker/dist/react-datepicker.css';
 import { Theme } from '@/providers/ThemeProvider/ThemeProvider';
 
@@ -51,6 +53,9 @@ const TodayMission = ({ onNowDateChange }: TodayMissionProps) => {
     transform: translate(-50%, -50%);
     z-index: 100001;
   `;
+  const StyledImage = styled(Image)`
+    cursor: pointer;
+  `;
   const theme = useTheme() as Theme;
   const [isOpenCalender, setIsOpenCalender] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
@@ -85,7 +90,27 @@ const TodayMission = ({ onNowDateChange }: TodayMissionProps) => {
       )}
       <div> </div>
       <InputDay theme={theme}>
-        {startDate && ` < ${startDate.toISOString().slice(0, 10)} > `}
+        <StyledImage
+          src={IcoArrowLeft}
+          alt="prev day"
+          onClick={() => {
+            const day = new Date(startDate);
+            const prevDay = new Date(startDate);
+            prevDay.setDate(day.getDate() - 1);
+            return setStartDate(prevDay);
+          }}
+        />
+        {startDate && ` ${startDate.toISOString().slice(0, 10)}`}
+        <StyledImage
+          src={IcoArrowRight}
+          alt="next day"
+          onClick={() => {
+            const day = new Date(startDate);
+            const nextDay = new Date(startDate);
+            nextDay.setDate(day.getDate() + 1);
+            return setStartDate(nextDay);
+          }}
+        />
       </InputDay>
       <ImageDiv onClick={openCalender}>
         <Image
