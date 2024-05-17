@@ -69,3 +69,32 @@ export const GetRoutines = (
     mandalartId,
     routineDate,
   });
+
+export interface IMandartMain {
+  id: number;
+  title: string;
+  type: 'main' | 'middle' | 'small';
+  content: string;
+  goalDate: Date;
+  parentGoalId: number | null;
+  subGoals: IMandartMain[];
+  achieved: boolean;
+}
+export interface IMandart {
+  id: number;
+  title: string;
+  categories: string[];
+  userId: number;
+  level: number;
+  exp: number;
+  due: Date;
+  levelUp: boolean;
+  mainGoal: IMandartMain[];
+  subGoals: IMandartMain[];
+  dday: number;
+}
+export const GetMandart = (userId: number) =>
+  useCustomQuery<IMandart[], undefined>(
+    `/mandalart/userId/${userId}`,
+    undefined
+  );

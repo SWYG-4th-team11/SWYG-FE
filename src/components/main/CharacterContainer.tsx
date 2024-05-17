@@ -4,6 +4,10 @@ import { useTheme } from '@emotion/react';
 import { Theme } from '@/providers/ThemeProvider/ThemeProvider';
 import Bubble from './Bubble';
 import ImgManda from '../../../public/image/ImgManda.svg';
+import ImgManda2 from '../../../public/image/ImgManda2.svg';
+import ImgManda3 from '../../../public/image/ImgManda3.svg';
+import ImgManda4 from '../../../public/image/ImgManda4.svg';
+import ImgManda5 from '../../../public/image/ImgManda5.svg';
 import { GetCharacter, GetQuote } from '@/pages/api/main/test';
 
 interface ITest {
@@ -103,13 +107,25 @@ const CharacterContainer = () => {
     if (level === 4) return '꽃';
     return '나무';
   };
+  const getImageManda = (level: number) => {
+    if (level === 1) return ImgManda;
+    if (level === 2) return ImgManda2;
+    if (level === 3) return ImgManda3;
+    if (level === 4) return ImgManda4;
+    return ImgManda5;
+  };
   return (
     <Main>
       <CharacterDiv>
         <Bubble>
           {QuoteData?.content ? QuoteData.content : '시작이 반이다'}
         </Bubble>
-        <Image src={ImgManda} alt="character" />
+        <Image
+          src={getImageManda(CharacterData?.[0]?.level || 0)}
+          alt="character"
+          width={200}
+          height={160}
+        />
       </CharacterDiv>
       <CharacterStatus>
         <Status>
