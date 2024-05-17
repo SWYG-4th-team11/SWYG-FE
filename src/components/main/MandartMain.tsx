@@ -177,7 +177,7 @@ const InputDetail = styled.input<{ theme: Theme }>`
 const InputDetailWithDay = styled.div<{ theme: Theme }>`
   display: flex;
   justify-content: space-between;
-  width: 100%;
+  width: 102%;
   background-color: ${({ theme }) => theme.colors.gray[4]};
   border: none;
   margin-bottom: 20px;
@@ -185,6 +185,7 @@ const InputDetailWithDay = styled.div<{ theme: Theme }>`
 const InputDay = styled.div<{ theme: Theme }>`
   display: flex;
   align-items: center;
+  padding-left: 10px;
 `;
 const InputDetailToggle = styled.div`
   display: flex;
