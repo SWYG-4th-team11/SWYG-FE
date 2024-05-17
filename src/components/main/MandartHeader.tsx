@@ -1,8 +1,9 @@
 import styled from '@emotion/styled';
-import Image from 'next/image';
+// import Image from 'next/image';
 import { useTheme } from '@emotion/react';
 import { Theme } from '@/providers/ThemeProvider/ThemeProvider';
-import IcoPencil from '../../../public/image/IcoPencil.svg';
+// import IcoPencil from '../../../public/image/IcoPencil.svg';
+import { GetMandart } from '@/pages/api/main/test';
 
 const Main = styled.div`
   display: flex;
@@ -43,29 +44,46 @@ const MyFavorite = styled.div`
   justify-content: center;
   align-items: center;
 `;
-const MyFavoriteItem = styled.div<{ theme: Theme }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 108px;
-  height: 40px;
-  border: 1px ${({ theme }) => theme.colors.green[0]} solid;
-  border-radius: 50px;
-  color: ${({ theme }) => theme.colors.green[0]};
-`;
-const IcoUpdateText = styled(Image)`
-  padding-left: 8px;
-  cursor: pointer;
-`;
+// const MyFavoriteItem = styled.div<{ theme: Theme }>`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   width: 108px;
+//   height: 40px;
+//   border: 1px ${({ theme }) => theme.colors.green[0]} solid;
+//   border-radius: 50px;
+//   color: ${({ theme }) => theme.colors.green[0]};
+// `;
+// const IcoUpdateText = styled(Image)`
+//   padding-left: 8px;
+//   cursor: pointer;
+// `;
 const MandartHeader = () => {
   const theme = useTheme() as Theme;
+  const id = Number(localStorage.getItem('id'));
+  const { data: MandartData } = GetMandart(id);
+  const getDisDate = (nowDate: Date) => {
+    const targetDate: Date = new Date(nowDate);
+
+    const currentDate: Date = new Date();
+
+    const timeDifference: number = targetDate.getTime() - currentDate.getTime();
+
+    const dayDifference: number = Math.ceil(
+      timeDifference / (1000 * 60 * 60 * 24)
+    );
+
+    return dayDifference;
+  };
   return (
     <Main>
       <TitleText theme={theme}>
-        <Dday theme={theme}>D-150</Dday>
+        <Dday theme={theme}>
+          {`D-${getDisDate(MandartData?.[0]?.due || new Date())}`}
+        </Dday>
         <MainText>
-          조금 더 성장하는 내가 되기 위하여
-          <IcoUpdateText src={IcoPencil} alt="update title" />
+          {MandartData?.[0]?.title}
+          {/* <IcoUpdateText src={IcoPencil} alt="update title" /> */}
         </MainText>
       </TitleText>
       <MyFavorite>

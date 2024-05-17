@@ -41,7 +41,6 @@ const Scheduler = () => {
     '/routine/view',
     {
       onSuccess: (data: IRoutinesResponse) => {
-        console.log(data.routines);
         setDaily(data.routines);
       },
     }

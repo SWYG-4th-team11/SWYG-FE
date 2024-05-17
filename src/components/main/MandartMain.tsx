@@ -7,8 +7,11 @@ import { Theme } from '@/providers/ThemeProvider/ThemeProvider';
 import IcoAdd from '../../../public/image/IcoAdd.svg';
 import IcoClose from '../../../public/image/IcoClose.svg';
 import IcoCalender from '../../../public/image/IcoCalendar.svg';
+import IcoCheck from '../../../public/image/IcoCheck.svg';
 import MainModal from './MainModal';
 import 'react-datepicker/dist/react-datepicker.css';
+import { GetMandart } from '@/pages/api/main/test';
+import { useCustomMutation } from '@/hooks/reactQueryHooks/reactQueryHooks';
 
 const Main = styled.div`
   display: flex;
@@ -18,7 +21,47 @@ const Main = styled.div`
   width: 100%;
   height: 100%;
 `;
-const Box = styled.div<{ theme: Theme }>`
+const BoxMain = styled.div<{ theme: Theme }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 136px;
+  height: 92px;
+  border: 1px solid black;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 2px 2px;
+  padding: 37.5px 15.5px;
+  font-size: ${({ theme }) => theme.typography.text3.fontSize};
+  /* font-weight: ${({ theme }) => theme.typography.text3.fontWeight}; */
+  font-weight: bold;
+  /* line-height: ${({ theme }) => theme.typography.text3.lineHeight}; */
+  line-height: 25px;
+  color: white;
+  background-color: ${({ theme }) => theme.colors.green[0]};
+`;
+const BoxMainAchieved = styled.div<{ theme: Theme }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 136px;
+  height: 92px;
+  border: 1px solid black;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 2px 2px;
+  padding: 37.5px 15.5px;
+  font-size: ${({ theme }) => theme.typography.text3.fontSize};
+  /* font-weight: ${({ theme }) => theme.typography.text3.fontWeight}; */
+  font-weight: bold;
+  /* line-height: ${({ theme }) => theme.typography.text3.lineHeight}; */
+  line-height: 25px;
+  color: white;
+  background-color: ${({ theme }) => theme.colors.green[0]};
+  opacity: 50%;
+  position: relative;
+`;
+const BoxMid = styled.div<{ theme: Theme }>`
   display: flex;
   justify-content: center;
   align-items: center;
@@ -35,6 +78,67 @@ const Box = styled.div<{ theme: Theme }>`
   /* line-height: ${({ theme }) => theme.typography.text3.lineHeight}; */
   line-height: 25px;
   color: ${({ theme }) => theme.colors.gray[1]};
+  background-color: ${({ theme }) => theme.colors.sub.lightYellow};
+`;
+const BoxMidAchieved = styled.div<{ theme: Theme }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 136px;
+  height: 92px;
+  border: 1px solid black;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 2px 2px;
+  padding: 37.5px 15.5px;
+  font-size: ${({ theme }) => theme.typography.text3.fontSize};
+  /* font-weight: ${({ theme }) => theme.typography.text3.fontWeight}; */
+  font-weight: bold;
+  /* line-height: ${({ theme }) => theme.typography.text3.lineHeight}; */
+  line-height: 25px;
+  color: ${({ theme }) => theme.colors.gray[1]};
+  background-color: ${({ theme }) => theme.colors.green[3]};
+  opacity: 50%;
+  position: relative;
+`;
+const BoxSmall = styled.div<{ theme: Theme }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 136px;
+  height: 92px;
+  border: 1px solid black;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 2px 2px;
+  padding: 37.5px 15.5px;
+  font-size: ${({ theme }) => theme.typography.text3.fontSize};
+  /* font-weight: ${({ theme }) => theme.typography.text3.fontWeight}; */
+  font-weight: bold;
+  /* line-height: ${({ theme }) => theme.typography.text3.lineHeight}; */
+  line-height: 25px;
+  color: ${({ theme }) => theme.colors.gray[1]};
+`;
+const BoxSmallAchieved = styled.div<{ theme: Theme }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 136px;
+  height: 92px;
+  border: 1px solid black;
+  border-radius: 10px;
+  cursor: pointer;
+  margin: 2px 2px;
+  padding: 37.5px 15.5px;
+  font-size: ${({ theme }) => theme.typography.text3.fontSize};
+  /* font-weight: ${({ theme }) => theme.typography.text3.fontWeight}; */
+  font-weight: bold;
+  /* line-height: ${({ theme }) => theme.typography.text3.lineHeight}; */
+  line-height: 25px;
+  color: ${({ theme }) => theme.colors.gray[3]};
+  background-color: ${({ theme }) => theme.colors.gray[5]};
+  opacity: 50%;
+  position: relative;
 `;
 const ModalTitle = styled.div<{ theme: Theme }>`
   display: flex;
@@ -153,12 +257,21 @@ const Desc = styled.div`
 const MandartMain = () => {
   const theme = useTheme() as Theme;
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [isOn, setisOn] = useState(false);
+  // const [isOn, setisOn] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const buttonRef = useRef<HTMLImageElement>(null);
-
-  const openModal = () => {
+  const id = Number(localStorage.getItem('id'));
+  const { data: MandartData, refetch } = GetMandart(id);
+  const [nowIndex, setNowIndex] = useState(0);
+  const [title, setTitle] = useState<string>();
+  const [content, setContent] = useState<string>();
+  const [goalDate, setGoalDate] = useState<Date>(new Date());
+  const [achieved, setAchieved] = useState<boolean>();
+  const openModal = (index: number) => {
     setIsModalOpen(true);
+    setNowIndex(index);
+    setStartDate(MandartData?.[0].subGoals[index].goalDate || new Date());
+    setAchieved(MandartData?.[0].subGoals[index].achieved);
   };
 
   const closeModal = () => {
@@ -167,11 +280,31 @@ const MandartMain = () => {
 
   const toggleHandler = () => {
     // isOn의 상태를 변경하는 메소드를 구현
-    setisOn(!isOn);
+    // setisOn(!isOn);
+    setAchieved(!achieved);
   };
   const [isOpenCalender, setIsOpenCalender] = useState(false);
   const openCalender = () => {
     setIsOpenCalender(!isOpenCalender);
+  };
+  const { mutate: updateMandartMutate } = useCustomMutation(
+    'put',
+    '/goal/update',
+    {
+      onSuccess: () => {
+        refetch();
+      },
+    }
+  );
+  const handleUpdateMandart = () => {
+    updateMandartMutate({
+      id: MandartData?.[0].subGoals[nowIndex].id,
+      title,
+      content,
+      goalDate,
+      achieved,
+    });
+    closeModal();
   };
   const DatePickerBack = styled.div`
     position: fixed;
@@ -189,11 +322,15 @@ const MandartMain = () => {
   `;
   const DatePickerDiv = styled.div<{ top: number; left: number }>`
     position: fixed;
-
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     z-index: 100001;
+  `;
+  const CheckIcon = styled(Image)`
+    position: absolute;
+    bottom: 5px;
+    right: 5px;
   `;
   return (
     <Main>
@@ -211,6 +348,7 @@ const MandartMain = () => {
             selected={startDate}
             onChange={(date: Date) => {
               setStartDate(date);
+              setGoalDate(date);
               openCalender();
             }}
             inline
@@ -226,11 +364,18 @@ const MandartMain = () => {
           </CloseBtn>
         </ModalTitle>
         <InputTitle theme={theme}>목표 이름</InputTitle>
-        <InputDetail theme={theme} placeholder="15자 이내로 입력해주세요." />
+        <InputDetail
+          theme={theme}
+          placeholder="15자 이내로 입력해주세요."
+          defaultValue={MandartData?.[0].subGoals[nowIndex].title}
+          onChange={(e) => {
+            setTitle(e.target.value);
+          }}
+        />
         <InputTitle theme={theme}>마감일</InputTitle>
         <InputDetailWithDay theme={theme}>
           <InputDay theme={theme}>
-            {startDate.toISOString().slice(0, 10)}
+            {new Date(startDate).toISOString().slice(0, 10)}
           </InputDay>
           <Image
             onClick={openCalender}
@@ -241,18 +386,19 @@ const MandartMain = () => {
             height={40}
             ref={buttonRef}
           />
-          {/* <SDatePicker
-            theme={theme}
-            dateFormat="yyyy/mm/dd"
-            selected={startDate}
-            onChange={(date: Date) => setStartDate(date)}
-          /> */}
         </InputDetailWithDay>
         <InputTitle theme={theme}>메모(필수x)</InputTitle>
-        <InputDetail theme={theme} placeholder="메모를 입력해주세요." />
+        <InputDetail
+          theme={theme}
+          placeholder="메모를 입력해주세요."
+          defaultValue={MandartData?.[0].subGoals[nowIndex].content}
+          onChange={(e) => {
+            setContent(e.target.value);
+          }}
+        />
         <InputTitle theme={theme}>달성여부</InputTitle>
         <InputDetailToggle>
-          {isOn === false ? (
+          {achieved === false ? (
             <Desc>
               <div className="OFF">미달성</div>
             </Desc>
@@ -263,89 +409,42 @@ const MandartMain = () => {
           )}
           <ToggleContainer onClick={toggleHandler}>
             <div
-              className={`toggle-container ${isOn ? 'toggle--checked' : null}`}
+              className={`toggle-container ${
+                achieved ? 'toggle--checked' : null
+              }`}
             />
             <div
-              className={`toggle-circle ${isOn ? 'toggle--checked' : null}`}
+              className={`toggle-circle ${achieved ? 'toggle--checked' : null}`}
             />
           </ToggleContainer>
         </InputDetailToggle>
-        <ModalButtonYes theme={theme}>수정완료</ModalButtonYes>
+        <ModalButtonYes theme={theme} onClick={handleUpdateMandart}>
+          수정완료
+        </ModalButtonYes>
         <ModalButtonNo>삭제하기</ModalButtonNo>
       </MainModal>
-      <Box theme={theme} onClick={openModal}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>꽉채웠을땐 어떤 느낌이냐면 여정도불라불라솰...</Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
-      <Box theme={theme}>
-        <Image src={IcoAdd} alt="add" />
-      </Box>
+      {MandartData?.[0].subGoals?.map((data, index) => {
+        let Box;
+        if (data.type === 'main') {
+          Box = data.achieved ? BoxMainAchieved : BoxMain;
+        } else if (data.type === 'middle') {
+          Box = data.achieved ? BoxMidAchieved : BoxMid;
+        } else if (data.type === 'small') {
+          Box = data.achieved ? BoxSmallAchieved : BoxSmall;
+        } else {
+          Box = BoxSmall;
+        }
+
+        return (
+          <Box key={data.id} theme={theme} onClick={() => openModal(index)}>
+            {!data.title && <Image src={IcoAdd} alt="add" />}
+            {data.title && data.title}
+            {data.achieved && (
+              <CheckIcon src={IcoCheck} alt="check" width={40} height={40} />
+            )}
+          </Box>
+        );
+      })}
     </Main>
   );
 };
