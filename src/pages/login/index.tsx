@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useState } from 'react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { useSetRecoilState } from 'recoil';
@@ -72,6 +73,12 @@ const Login = () => {
 
   return (
     <ResponsiveLayout>
+      <Head>
+        <title>만다르트 로그인</title>
+        <meta name="description" content="만다라트 로그인" />
+        <meta name="keywords" content="만다라트,mandalart,login" />
+      </Head>
+      ;
       <Container>
         <TitleBox>
           <Image

@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Head from 'next/head';
 import styled from '@emotion/styled';
 
 import ResponsiveLayout from '@/layouts/ResponsiveLayout/ResponseiveLayout';
@@ -21,6 +22,12 @@ const Join = () => {
 
   return (
     <ResponsiveLayout>
+      <Head>
+        <title>만다르트 회원가입</title>
+        <meta name="description" content="만다라트 회원가입" />
+        <meta name="keywords" content="만다라트,mandalart,signup" />
+      </Head>
+      ;
       <Container>
         {success ? (
           <JoinResult />

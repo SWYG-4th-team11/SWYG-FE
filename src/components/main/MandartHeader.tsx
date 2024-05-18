@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import Head from 'next/head';
 // import Image from 'next/image';
 import { useTheme } from '@emotion/react';
 import { Theme } from '@/providers/ThemeProvider/ThemeProvider';
@@ -77,6 +78,11 @@ const MandartHeader = () => {
   };
   return (
     <Main>
+      <Head>
+        <title>만다르트 메인 헤더</title>
+        <meta name="description" content="만다라트 헤더" />
+        <meta name="keywords" content="만다라트,mandalart" />
+      </Head>
       <TitleText theme={theme}>
         <Dday theme={theme}>
           {`D-${getDisDate(MandartData?.[0]?.due || new Date())}`}
