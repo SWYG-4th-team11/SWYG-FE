@@ -1,32 +1,18 @@
 import React, { useState } from 'react';
-import styled from '@emotion/styled';
 import { useCustomMutation } from '@/hooks/reactQueryHooks/reactQueryHooks';
-import { CheckButton, NextButton } from '../common/Button';
+import { CheckButton, GreenCheckButton, NextButton } from '../common/Button';
 import { SmallInput, BigInput } from '../common/Input';
 import {
   BoxWrapper,
-  FormContainer,
   InputGroup,
-  Label,
   BtnWrapper,
-  Title,
   MultiInputGroup,
-} from '@/styles/join/join';
+} from '@/styles/join/joinStyles';
 import { CheckNicknameType } from '@/types/joinTypes';
-
-export const ErrorText = styled.div(({ theme }) => ({
-  color: 'red',
-  fontSize: theme.typography.text3.fontSize,
-  fontWeight: theme.typography.text3.fontWeight,
-  lineHeight: `${theme.typography.text3.lineHeight}px`,
-}));
-
-const ConfirmText = styled.div(({ theme }) => ({
-  color: 'green',
-  fontSize: theme.typography.text3.fontSize,
-  fontWeight: theme.typography.text3.fontWeight,
-  lineHeight: `${theme.typography.text3.lineHeight}px`,
-}));
+import { Title } from '@/components/common/Title';
+import { ConfirmText, ErrorText } from '../common/Text';
+import { Label } from '../common/Label';
+import { FormContainer } from '../common/From';
 
 interface IJoinBoxProps {
   onChangeSuccess: () => void;
@@ -38,6 +24,7 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
   const [password, setPassword] = useState<string>('');
   const [passwordCheck, setPasswordCheck] = useState<string>('');
   const [authCode, setAuthCode] = useState<string>('');
+  const [isTime, setIsTime] = useState<boolean>(false);
 
   const [errors, setErrors] = useState({
     nickName: false,
@@ -94,6 +81,7 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
     if (password !== newPasswordCheck) {
       setErrors((prev) => ({ ...prev, passwordCheck: true }));
     } else {
+      setSuccessInput((prev) => ({ ...prev, passwordCheck: true }));
       setErrors((prev) => ({ ...prev, passwordCheck: false }));
     }
   };
@@ -104,7 +92,7 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
     '/user/nickname/check-unique',
     {
       onSuccess: (data: CheckNicknameType) => {
-        console.log('data', data);
+        console.log('NicknameCheckMutate', data);
         setSuccessInput((prev) => ({
           ...prev,
           nickName: data.isUnique,
@@ -125,7 +113,16 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
   // 이메일 인증
   const { mutate: emailCheckMutate } = useCustomMutation(
     'post',
-    '/send-mail/auth'
+    '/send-mail/auth',
+    {
+      onSuccess: (data) => {
+        console.log('emailCheckMutate', data);
+        setIsTime(true);
+      },
+      onError: (error) => {
+        console.error(error);
+      },
+    }
   );
 
   const handleEmailCheck = () => {
@@ -137,10 +134,10 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
   // 인증번호 일치 체크
   const { mutate: emailAuthCheckMutate } = useCustomMutation(
     'post',
-    '/send-mail/auth-check',
+    '/send-mail/verify',
     {
       onSuccess: (data) => {
-        console.log('data', data);
+        console.log('emailAuthCheckMutate', data);
         setSuccessInput((prev) => ({
           ...prev,
           authCode: true,
@@ -155,13 +152,14 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
   const handleAuthCodeCheck = () => {
     emailAuthCheckMutate({
       email,
-      authCode,
+      code: authCode,
     });
   };
 
   // 회원가입
   const { mutate: joinMutate } = useCustomMutation('post', '/user/signup', {
-    onSuccess: () => {
+    onSuccess: (data) => {
+      console.log(data);
       onChangeSuccess();
     },
     onError: (error) => {
@@ -170,11 +168,9 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
   });
 
   const handleJoin = () => {
-    console.log(successInput.nickName, successInput.authCode);
-    // if (validateInputs() && successInput.nickName && successInput.authCode) {
-    if (validateInputs()) {
+    if (validateInputs() && successInput.nickName && successInput.authCode) {
       joinMutate({
-        nickName,
+        nickname: nickName,
         email,
         password,
       });
@@ -190,7 +186,7 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
             <Label>닉네임</Label>
             <BtnWrapper>
               <SmallInput
-                placeholder="8자 이내로 입력 해주세요."
+                placeholder="닉네임을 입력 해주세요."
                 value={nickName}
                 onChange={handleNickname}
                 error={errors.nickName}
@@ -216,28 +212,37 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
                 error={errors.email}
               />
 
-              <CheckButton onClick={handleEmailCheck}>인증하기</CheckButton>
+              <GreenCheckButton onClick={handleEmailCheck}>
+                인증
+              </GreenCheckButton>
             </BtnWrapper>
-            {errors.email && <ErrorText>작성해주세요</ErrorText>}
+            {errors.email && <ErrorText>중복 닉네임입니다.</ErrorText>}
             <BtnWrapper>
               <SmallInput
-                placeholder="인증번호 6자리를 입력 해주세요"
+                placeholder="인증번호 8자리를 입력 해주세요"
                 value={authCode}
                 onChange={handleAuthCode}
                 error={errors.authCode}
+                success={successInput.authCode}
               />
-              <CheckButton onClick={handleAuthCodeCheck}>
-                인증번호 체크
-              </CheckButton>
+              <CheckButton onClick={handleAuthCodeCheck}>확인</CheckButton>
             </BtnWrapper>
+            {isTime && (
+              <ConfirmText>
+                인증번호를 발송했습니다(3분안에 입력해주세요.).
+              </ConfirmText>
+            )}
             {errors.authCode && <ErrorText>인증번호가 틀렸습니다.</ErrorText>}
+            {successInput.authCode && (
+              <ConfirmText>인증되었습니다.</ConfirmText>
+            )}
           </MultiInputGroup>
 
           <InputGroup>
             <Label>비밀번호</Label>
             <BtnWrapper>
               <BigInput
-                placeholder="4~16자의 영문 대소문자의 숫자만 입력"
+                placeholder="비밀번호를 입력 해 주세요."
                 type="password"
                 value={password}
                 onChange={handlePassword}
@@ -256,10 +261,14 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
                 value={passwordCheck}
                 onChange={handlePasswordCheck}
                 error={errors.passwordCheck}
+                success={successInput.passwordCheck}
               />
             </BtnWrapper>
             {errors.passwordCheck && (
               <ErrorText>비밀번호가 틀렸습니다.</ErrorText>
+            )}
+            {successInput.passwordCheck && (
+              <ConfirmText>비밀번호가 일치합니다.</ConfirmText>
             )}
           </InputGroup>
         </FormContainer>

@@ -5,7 +5,10 @@ interface IAuthStoreType {
   isLogin: boolean;
   email: string;
   nickname: string;
-  createdDateTime: string;
+  createdAt: string;
+  updatedAt: string | null;
+  level: number | null;
+  exp: number | null;
 }
 
 const AuthStore = atom<IAuthStoreType>({
@@ -15,7 +18,10 @@ const AuthStore = atom<IAuthStoreType>({
     isLogin: false,
     email: '',
     nickname: '',
-    createdDateTime: '',
+    createdAt: '',
+    updatedAt: '',
+    level: null,
+    exp: null,
   },
 });
 

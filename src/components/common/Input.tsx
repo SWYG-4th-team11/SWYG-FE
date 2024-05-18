@@ -34,20 +34,23 @@ export const SmallInput = styled.input<{ error?: boolean; success?: boolean }>(
   })
 );
 
-export const BigInput = styled.input<{ error?: boolean }>(
-  ({ theme, error }) => ({
+export const BigInput = styled.input<{ error?: boolean; success?: boolean }>(
+  ({ theme, error, success }) => ({
     width: '860px',
     height: '40px',
     padding: '16px 20px',
-    // marginTop: '20px',
     backgroundColor: theme.colors.gray[6],
     position: 'relative',
     gap: '10px',
     borderRadius: '6px',
-    border: error ? '2px solid red' : `1px solid ${theme.colors.gray[5]}`, // 에러 상태에 따라 테두리 색상 변경
     fontSize: theme.typography.text3.fntSize,
     fontWeight: theme.typography.text3.fotWeight,
     lineHeight: `${theme.typography.text3.lineHeight}px`,
+    border: error
+      ? '2px solid red'
+      : success
+      ? '2px solid green'
+      : '1px solid #ccc', // 기본 테두리 색상
 
     '::plcaeholder': {
       color: theme.colors.gray[3],
