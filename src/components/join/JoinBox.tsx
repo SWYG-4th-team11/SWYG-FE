@@ -1,173 +1,282 @@
-import React from 'react';
-import styled from '@emotion/styled';
+import React, { useState } from 'react';
+import { useCustomMutation } from '@/hooks/reactQueryHooks/reactQueryHooks';
+import { CheckButton, GreenCheckButton, NextButton } from '../common/Button';
+import { SmallInput, BigInput } from '../common/Input';
+import {
+  BoxWrapper,
+  InputGroup,
+  BtnWrapper,
+  MultiInputGroup,
+} from '@/styles/join/joinStyles';
+import { CheckNicknameType } from '@/types/joinTypes';
+import { Title } from '@/components/common/Title';
+import { ConfirmText, ErrorText } from '../common/Text';
+import { Label } from '../common/Label';
+import { FormContainer } from '../common/From';
 
-const BoxWrapper = styled.div`
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-direction: column;
-  position: relative;
-`;
+interface IJoinBoxProps {
+  onChangeSuccess: () => void;
+}
 
-const Title = styled.div(({ theme }) => ({
-  color: theme.colors.gray[0],
-  fontSize: theme.typography.title1.fontSize,
-  fontWeight: theme.typography.title1.fontWeight,
-  lineHeight: `${theme.typography.title1.lineHeight}px`,
-  textAlign: 'center',
-  width: '160px',
-  height: '68px',
-  gap: '12px',
-}));
+const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
+  const [nickName, setNickName] = useState<string>('');
+  const [email, setEmail] = useState<string>('');
+  const [password, setPassword] = useState<string>('');
+  const [passwordCheck, setPasswordCheck] = useState<string>('');
+  const [authCode, setAuthCode] = useState<string>('');
+  const [isTime, setIsTime] = useState<boolean>(false);
 
-const FormContainer = styled.div`
-  display: flex;
-  align-items: flex-start;
-  flex-direction: column;
-  gap: 32px;
-  position: relative;
-  width: 860px;
-  height: 600px;
-  /* background-color: red; */
-`;
+  const [errors, setErrors] = useState({
+    nickName: false,
+    email: false,
+    password: false,
+    passwordCheck: false,
+    authCode: false,
+  });
 
-const InputGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: flex-start;
-  gap: 4px;
-  position: relative;
-  width: 859px;
-  height: 108px;
-  /* margin-top: 20px; */
-  margin-bottom: 20px;
-`;
+  const [successInput, setSuccessInput] = useState({
+    nickName: false,
+    passwordCheck: false,
+    authCode: false,
+  });
 
-const Label = styled.label(({ theme }) => ({
-  width: '120px',
-  height: '32px',
-  fontSize: theme.typography.title3.fontSize,
-  fontWeight: theme.typography.title3.fontWeight,
-  lineHeight: `${theme.typography.title3.lineHeight}px`,
-}));
+  const validateInputs = () => {
+    const newErrors = {
+      nickName: !nickName,
+      email: !email,
+      password: !password,
+      passwordCheck: !passwordCheck || password !== passwordCheck,
+      authCode: !authCode,
+    };
+    setErrors(newErrors);
+    return Object.values(newErrors).every((v) => !v);
+  };
 
-const BtnWrapper = styled.div`
-  display: inline-flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 16px;
-  width: 859px;
-  height: 72px;
-  position: relative;
-`;
+  const handleNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNickName(e.target.value);
+  };
 
-const Input = styled.input(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  backgroundColor: theme.colors.gray[5],
-  borderRadius: '6px',
-  gap: '10px',
-  height: '40px',
-  width: '736px',
-  padding: '16px 20px',
-  position: 'relative',
+  const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(e.target.value);
+  };
 
-  '::plcaeholder': {
-    color: theme.colors.gray[3],
-    fontSize: theme.typography.text3.fntSize,
-    fontWeight: theme.typography.text3.fotWeight,
-    lineHeight: `${theme.typography.text3.lineHeight}px`,
-    position: 'fixed',
-    left: '0',
-    top: '0',
-    whiteSpace: 'nowrap',
-    height: '30px',
-    width: '203px',
-  },
-}));
+  const handleAuthCode = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setAuthCode(e.target.value);
+  };
+  const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPassword = e.target.value;
+    setPassword(newPassword);
+    // 비밀번호 일치 검사 업데이트 (비밀번호 변경시)
+    if (passwordCheck !== newPassword) {
+      setErrors((prev) => ({ ...prev, passwordCheck: true }));
+    } else {
+      setErrors((prev) => ({ ...prev, passwordCheck: false }));
+    }
+  };
 
-const CheckButton = styled.button(({ theme }) => ({
-  alignItems: 'center',
-  border: '2px solid',
-  borderColor: theme.colors.green[0],
-  borderRadius: '6px',
-  display: 'flex',
-  gap: '10px',
-  height: '74px',
-  justifyContent: 'center',
-  padding: '16px',
-  position: 'relative',
-  width: '115px',
-  backgroundColor: theme.colors.white,
-  color: theme.colors.green[0],
-  fontSize: theme.typography.text3.fontSize,
-  fontWeight: theme.typography.text3.fontWeight,
-  lineHeight: `${theme.typography.text3.lineHeight}px`,
-}));
+  const handlePasswordCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const newPasswordCheck = e.target.value;
+    setPasswordCheck(newPasswordCheck);
+    // 비밀번호와 비밀번호 확인 일치 여부 검사
+    if (password !== newPasswordCheck) {
+      setErrors((prev) => ({ ...prev, passwordCheck: true }));
+    } else {
+      setSuccessInput((prev) => ({ ...prev, passwordCheck: true }));
+      setErrors((prev) => ({ ...prev, passwordCheck: false }));
+    }
+  };
 
-const SingleInput = styled.input(({ theme }) => ({
-  width: '860px',
-  height: '40px',
-  padding: '16px 20px',
-  marginTop: '20px',
-  backgroundColor: theme.colors.gray[5],
-  position: 'relative',
-  gap: '10px',
-  borderRadius: '6px',
+  // 이메일 중복체크
+  const { mutate: NicknameCheckMutate } = useCustomMutation(
+    'post',
+    '/user/nickname/check-unique',
+    {
+      onSuccess: (data: CheckNicknameType) => {
+        console.log('NicknameCheckMutate', data);
+        setSuccessInput((prev) => ({
+          ...prev,
+          nickName: data.isUnique,
+        }));
+      },
+      onError: (error) => {
+        console.error(error);
+      },
+    }
+  );
 
-  '::plcaeholder': {
-    color: theme.colors.gray[3],
-    fontSize: theme.typography.text3.fntSize,
-    fontWeight: theme.typography.text3.fotWeight,
-    lineHeight: `${theme.typography.text3.lineHeight}px`,
-    position: 'fixed',
-    left: '0',
-    top: '0',
-    whiteSpace: 'nowrap',
-    height: '30px',
-    width: '203px',
-  },
-}));
+  const handleNicknameCheck = () => {
+    NicknameCheckMutate({
+      nickName,
+    });
+  };
 
-const JoinBox = () => (
-  <BoxWrapper>
-    <Title>회원가입</Title>
-    <FormContainer>
-      <InputGroup>
-        <Label>닉네임</Label>
-        <BtnWrapper>
-          <Input placeholder="8자 이내로 입력 해주세요." />
-          <CheckButton>중복 체크</CheckButton>
-        </BtnWrapper>
-      </InputGroup>
+  // 이메일 인증
+  const { mutate: emailCheckMutate } = useCustomMutation(
+    'post',
+    '/send-mail/auth',
+    {
+      onSuccess: (data) => {
+        console.log('emailCheckMutate', data);
+        setIsTime(true);
+      },
+      onError: (error) => {
+        console.error(error);
+      },
+    }
+  );
 
-      <InputGroup>
-        <Label>이메일</Label>
-        <BtnWrapper>
-          <Input placeholder="인증하기" />
-          <CheckButton>인증하기</CheckButton>
-        </BtnWrapper>
-        <BtnWrapper>
-          <SingleInput placeholder="인증번호 6자리를 입력 해주세요" />
-        </BtnWrapper>
-      </InputGroup>
+  const handleEmailCheck = () => {
+    emailCheckMutate({
+      email,
+    });
+  };
 
-      <InputGroup>
-        <Label>비밀번호</Label>
-        <BtnWrapper>
-          <SingleInput placeholder="4~16자의 영문 대소문자의 숫자만 입력" />
-        </BtnWrapper>
-      </InputGroup>
+  // 인증번호 일치 체크
+  const { mutate: emailAuthCheckMutate } = useCustomMutation(
+    'post',
+    '/send-mail/verify',
+    {
+      onSuccess: (data) => {
+        console.log('emailAuthCheckMutate', data);
+        setSuccessInput((prev) => ({
+          ...prev,
+          authCode: true,
+        }));
+      },
+      onError: (error) => {
+        console.error(error);
+      },
+    }
+  );
 
-      <InputGroup>
-        <Label>비밀번호 확인</Label>
-        <BtnWrapper>
-          <SingleInput placeholder="4~16자의 영문 대소문자와 숫자만 입력" />
-        </BtnWrapper>
-      </InputGroup>
-    </FormContainer>
-  </BoxWrapper>
-);
+  const handleAuthCodeCheck = () => {
+    emailAuthCheckMutate({
+      email,
+      code: authCode,
+    });
+  };
+
+  // 회원가입
+  const { mutate: joinMutate } = useCustomMutation('post', '/user/signup', {
+    onSuccess: (data) => {
+      console.log(data);
+      onChangeSuccess();
+    },
+    onError: (error) => {
+      console.error(error);
+    },
+  });
+
+  const handleJoin = () => {
+    if (validateInputs() && successInput.nickName && successInput.authCode) {
+      joinMutate({
+        nickname: nickName,
+        email,
+        password,
+      });
+    }
+  };
+
+  return (
+    <>
+      <BoxWrapper>
+        <Title>회원가입</Title>
+        <FormContainer>
+          <InputGroup>
+            <Label>닉네임</Label>
+            <BtnWrapper>
+              <SmallInput
+                placeholder="닉네임을 입력 해주세요."
+                value={nickName}
+                onChange={handleNickname}
+                error={errors.nickName}
+                success={successInput.nickName}
+              />
+
+              <CheckButton onClick={handleNicknameCheck}>중복 체크</CheckButton>
+            </BtnWrapper>
+            {errors.nickName && <ErrorText>중복 닉네임입니다.</ErrorText>}
+            {successInput.nickName && (
+              <ConfirmText>사용 가능한 닉네임입니다.</ConfirmText>
+            )}
+          </InputGroup>
+
+          <MultiInputGroup>
+            <Label>이메일</Label>
+            <BtnWrapper>
+              <SmallInput
+                placeholder="이메일 주소를 입력 해주세요."
+                type="email"
+                value={email}
+                onChange={handleEmail}
+                error={errors.email}
+              />
+
+              <GreenCheckButton onClick={handleEmailCheck}>
+                인증
+              </GreenCheckButton>
+            </BtnWrapper>
+            {errors.email && <ErrorText>중복 닉네임입니다.</ErrorText>}
+            <BtnWrapper>
+              <SmallInput
+                placeholder="인증번호 8자리를 입력 해주세요"
+                value={authCode}
+                onChange={handleAuthCode}
+                error={errors.authCode}
+                success={successInput.authCode}
+              />
+              <CheckButton onClick={handleAuthCodeCheck}>확인</CheckButton>
+            </BtnWrapper>
+            {isTime && (
+              <ConfirmText>
+                인증번호를 발송했습니다(3분안에 입력해주세요.).
+              </ConfirmText>
+            )}
+            {errors.authCode && <ErrorText>인증번호가 틀렸습니다.</ErrorText>}
+            {successInput.authCode && (
+              <ConfirmText>인증되었습니다.</ConfirmText>
+            )}
+          </MultiInputGroup>
+
+          <InputGroup>
+            <Label>비밀번호</Label>
+            <BtnWrapper>
+              <BigInput
+                placeholder="비밀번호를 입력 해 주세요."
+                type="password"
+                value={password}
+                onChange={handlePassword}
+                error={errors.password}
+              />
+            </BtnWrapper>
+            {errors.password && <ErrorText>비밀번호를 작성해주세요</ErrorText>}
+          </InputGroup>
+
+          <InputGroup>
+            <Label>비밀번호 확인</Label>
+            <BtnWrapper>
+              <BigInput
+                placeholder="4~16자의 영문 대소문자와 숫자만 입력"
+                type="password"
+                value={passwordCheck}
+                onChange={handlePasswordCheck}
+                error={errors.passwordCheck}
+                success={successInput.passwordCheck}
+              />
+            </BtnWrapper>
+            {errors.passwordCheck && (
+              <ErrorText>비밀번호가 틀렸습니다.</ErrorText>
+            )}
+            {successInput.passwordCheck && (
+              <ConfirmText>비밀번호가 일치합니다.</ConfirmText>
+            )}
+          </InputGroup>
+        </FormContainer>
+      </BoxWrapper>
+
+      <NextButton onClick={handleJoin}>가입하기</NextButton>
+    </>
+  );
+};
 
 export default JoinBox;

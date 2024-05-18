@@ -1,12 +1,15 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import styled from '@emotion/styled';
 
 import { useRouter } from 'next/router';
+import { useSetRecoilState } from 'recoil';
 import First from '@/components/serviceInformation/first';
 import Seconds from '@/components/serviceInformation/seconds';
 import ResponsiveLayout from '@/layouts/ResponsiveLayout/ResponseiveLayout';
 import Third from '@/components/serviceInformation/third';
 import Fourth from '@/components/serviceInformation/fourth';
+import { GetLoginUser } from '../api/auth/authApi';
+import AuthStore from '@/store/auth/authStore';
 
 const Container = styled.div(({ theme }) => ({
   display: 'flex',
@@ -15,7 +18,7 @@ const Container = styled.div(({ theme }) => ({
   alignItems: 'center',
   padding: '4rem',
   backgroundColor: theme.colors.gray[6],
-  height: '100vh',
+  height: '70vh',
 }));
 
 const NextButton = styled.button(({ theme }) => ({
@@ -25,10 +28,9 @@ const NextButton = styled.button(({ theme }) => ({
   borderRadius: '40px',
   color: theme.colors.white,
   gap: '16px',
-  height: '84px',
   justifyContent: 'center',
   padding: '20px 24px',
-  width: '860px',
+  width: '900px',
   cursor: 'pointer',
   fontSize: theme.typography.title2.fontSize,
   fontWeight: theme.typography.title2.fontWeight,
@@ -40,10 +42,46 @@ const NextButton = styled.button(({ theme }) => ({
 const ServiceInformation = () => {
   const router = useRouter();
   const [step, setStep] = useState<number>(1);
+  const [id, setId] = useState<number | undefined>(undefined);
+  const setAuthData = useSetRecoilState(AuthStore);
+
+  useEffect(() => {
+    const storedId = localStorage.getItem('id');
+    if (storedId) {
+      setId(Number(storedId));
+    }
+  }, []);
+
+  const { data: LoginUserData } = GetLoginUser(
+    { id: Number(id) },
+    {
+      enabled: id !== undefined,
+      queryKey: ['user', { id: Number(id) }],
+    }
+  );
+
+  useEffect(() => {
+    if (LoginUserData) {
+      setAuthData({
+        isLogin: true,
+        id: LoginUserData.id,
+        email: LoginUserData.email,
+        nickname: LoginUserData.nickname,
+        createdAt: LoginUserData.createdAt,
+        updatedAt: LoginUserData.updatedAt,
+        level: LoginUserData.level,
+        exp: LoginUserData.exp,
+      });
+    }
+  }, [LoginUserData, setAuthData]);
 
   const onNextClick = useCallback(() => {
     if (step === 4) {
-      router.push('/service'); // 4번째 단계일 때 'service' 페이지로 이동
+      if (LoginUserData) {
+        router.push('/service'); // 4번째 단계일 때 'service' 페이지로 이동
+      } else {
+        router.push('/join'); // 로그인이 안되어있을 때는 '/' 페이지로 이동
+      }
     } else {
       setStep((prev) => prev + 1);
     }

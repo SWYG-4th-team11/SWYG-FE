@@ -17,7 +17,10 @@
 
 #### 현재 완료 페이지
 
-- localhost:3000/join (회원가입)
-- localhost:3000/login (로그인)
-- localhost:3000/serviceInformation (서비스설명)
-- localhost:3000/start (시작화면)
+로그인 = join
+회원가입 = signup
+서비스소개 = introduction
+홈 = main
+마이페이지 = mypage
+비밀번호변경 = change-password
+임시비밀번호 = find-password
