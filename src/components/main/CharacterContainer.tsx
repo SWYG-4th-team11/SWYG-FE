@@ -2,6 +2,7 @@ import styled from '@emotion/styled';
 import Image from 'next/image';
 import { useTheme } from '@emotion/react';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { Theme } from '@/providers/ThemeProvider/ThemeProvider';
 import Bubble from './Bubble';
 import ImgManda from '../../../public/image/ImgManda.svg';
@@ -152,7 +153,9 @@ const ImageContainer = styled.div`
 `;
 const CharacterContainer = () => {
   const theme = useTheme() as Theme;
-  const id = Number(localStorage.getItem('id'));
+  const router = useRouter();
+  // const id = Number(localStorage.getItem('id'));
+  const [id, setId] = useState(0);
   const { data: QuoteData } = GetQuote();
   const { data: CharacterData } = GetCharacter(id);
   const { data: LoginUserData } = GetLoginUser({ id: Number(id) });
@@ -169,7 +172,14 @@ const CharacterContainer = () => {
       setPrevLevel(currentLevel);
     }
   }, [CharacterData, prevLevel]);
-
+  useEffect(() => {
+    const storedId = Number(localStorage.getItem('id'));
+    if (storedId) {
+      setId(Number(storedId));
+    } else {
+      router.push('/');
+    }
+  }, []);
   const getCharcterTitle = (level: number) => {
     if (level === 1) return '씨앗';
     if (level === 2) return '새싹';

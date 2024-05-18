@@ -1,7 +1,8 @@
 import Head from 'next/head';
 import styled from '@emotion/styled';
 import { useTheme } from '@emotion/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import Image from 'next/image';
 import { Theme } from '@/providers/ThemeProvider/ThemeProvider';
 import IcoClose from '../../../public/image/IcoClose.svg';
@@ -79,12 +80,23 @@ interface MissionProps {
 }
 const AddMission = ({ onChangeRoutine }: MissionProps) => {
   const theme = useTheme() as Theme;
+  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [title, setTitle] = useState('');
   const [memo, setMemo] = useState('');
-  const userId = Number(localStorage.getItem('id'));
+  // const userId =
+  //   typeof window !== 'undefined' ? Number(localStorage?.getItem('id')) : null;
+  const [userId, setUserId] = useState(0);
   const { data: CharacterData } = GetCharacter(userId);
   const mandalartId = CharacterData?.[0]?.id ?? 0;
+  useEffect(() => {
+    const storedId = Number(localStorage.getItem('id'));
+    if (storedId) {
+      setUserId(Number(storedId));
+    } else {
+      router.push('/');
+    }
+  }, []);
   const openModal = () => {
     setIsModalOpen(true);
   };
