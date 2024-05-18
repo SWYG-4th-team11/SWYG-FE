@@ -1,3 +1,4 @@
+/* eslint-disable no-nested-ternary */
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import DatePicker from 'react-datepicker';
@@ -462,10 +463,13 @@ const MandartMain = () => {
 
         return (
           <Box key={data.id} theme={theme} onClick={() => openModal(index)}>
-            {!data.title && <Image src={IcoAdd} alt="add" />}
-            {data.title && data.title.length < 10
-              ? data.title
-              : `${data.title.slice(0, 10)}...`}
+            {!data.title ? (
+              <Image src={IcoAdd} alt="add" />
+            ) : data.title.length < 10 ? (
+              data.title
+            ) : (
+              `${data.title.slice(0, 10)}...`
+            )}
             {data.achieved && (
               <CheckIcon src={IcoCheck} alt="check" width={40} height={40} />
             )}
