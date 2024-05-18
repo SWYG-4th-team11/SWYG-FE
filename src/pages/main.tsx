@@ -40,6 +40,10 @@ const MandartContainer = styled.div`
   width: 925px;
   height: 900px;
   /* border: 1px solid black; */
+  @media (max-width: 1300px) {
+    width: 600px;
+    height: 900px;
+  }
 `;
 
 export default function Main() {

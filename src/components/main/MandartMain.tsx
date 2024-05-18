@@ -39,6 +39,10 @@ const BoxMain = styled.div<{ theme: Theme }>`
   line-height: 25px;
   color: white;
   background-color: ${({ theme }) => theme.colors.green[0]};
+  @media (max-width: 1300px) {
+    width: 76px;
+    height: 32px;
+  }
 `;
 const BoxMainAchieved = styled.div<{ theme: Theme }>`
   display: flex;
@@ -60,6 +64,10 @@ const BoxMainAchieved = styled.div<{ theme: Theme }>`
   background-color: ${({ theme }) => theme.colors.green[0]};
   opacity: 50%;
   position: relative;
+  @media (max-width: 1300px) {
+    width: 76px;
+    height: 32px;
+  }
 `;
 const BoxMid = styled.div<{ theme: Theme }>`
   display: flex;
@@ -79,6 +87,10 @@ const BoxMid = styled.div<{ theme: Theme }>`
   line-height: 25px;
   color: ${({ theme }) => theme.colors.gray[1]};
   background-color: ${({ theme }) => theme.colors.sub.lightYellow};
+  @media (max-width: 1300px) {
+    width: 76px;
+    height: 32px;
+  }
 `;
 const BoxMidAchieved = styled.div<{ theme: Theme }>`
   display: flex;
@@ -100,6 +112,10 @@ const BoxMidAchieved = styled.div<{ theme: Theme }>`
   background-color: ${({ theme }) => theme.colors.green[3]};
   opacity: 50%;
   position: relative;
+  @media (max-width: 1300px) {
+    width: 76px;
+    height: 32px;
+  }
 `;
 const BoxSmall = styled.div<{ theme: Theme }>`
   display: flex;
@@ -118,6 +134,10 @@ const BoxSmall = styled.div<{ theme: Theme }>`
   /* line-height: ${({ theme }) => theme.typography.text3.lineHeight}; */
   line-height: 25px;
   color: ${({ theme }) => theme.colors.gray[1]};
+  @media (max-width: 1300px) {
+    width: 76px;
+    height: 32px;
+  }
 `;
 const BoxSmallAchieved = styled.div<{ theme: Theme }>`
   display: flex;
@@ -139,6 +159,10 @@ const BoxSmallAchieved = styled.div<{ theme: Theme }>`
   background-color: ${({ theme }) => theme.colors.gray[5]};
   opacity: 50%;
   position: relative;
+  @media (max-width: 1300px) {
+    width: 76px;
+    height: 32px;
+  }
 `;
 const ModalTitle = styled.div<{ theme: Theme }>`
   display: flex;
