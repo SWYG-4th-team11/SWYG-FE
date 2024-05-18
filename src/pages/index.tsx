@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Head from 'next/head';
 import styled from '@emotion/styled';
 import { useSetRecoilState } from 'recoil';
 import ResponsiveLayout from '@/layouts/ResponsiveLayout/ResponseiveLayout';
@@ -48,6 +49,12 @@ export const Start = () => {
 
   return (
     <ResponsiveLayout>
+      <Head>
+        <title>만다르트</title>
+        <meta name="description" content="만다라트 페이지" />
+        <meta name="keywords" content="만다라트,mandalart" />
+      </Head>
+      ;
       <Container>
         <LeftSection />
 

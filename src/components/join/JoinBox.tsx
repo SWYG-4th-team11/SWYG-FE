@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import Head from 'next/head';
 import { useCustomMutation } from '@/hooks/reactQueryHooks/reactQueryHooks';
 import { CheckButton, GreenCheckButton, NextButton } from '../common/Button';
 import { SmallInput, BigInput } from '../common/Input';
@@ -179,6 +180,11 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
 
   return (
     <>
+      <Head>
+        <title>만다르트 회원가입</title>
+        <meta name="description" content="만다라트 회원가입" />
+        <meta name="keywords" content="만다라트,mandalart,signup" />
+      </Head>
       <BoxWrapper>
         <Title>회원가입</Title>
         <FormContainer>
@@ -273,7 +279,6 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
           </InputGroup>
         </FormContainer>
       </BoxWrapper>
-
       <NextButton onClick={handleJoin}>가입하기</NextButton>
     </>
   );

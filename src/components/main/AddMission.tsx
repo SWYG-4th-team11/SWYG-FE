@@ -1,3 +1,4 @@
+import Head from 'next/head';
 import styled from '@emotion/styled';
 import { useTheme } from '@emotion/react';
 import { useState } from 'react';
@@ -114,6 +115,11 @@ const AddMission = ({ onChangeRoutine }: MissionProps) => {
   };
   return (
     <Main>
+      <Head>
+        <title>만다르트 오늘의 일정</title>
+        <meta name="description" content="만다라트 오늘의 일정 추가" />
+        <meta name="keywords" content="만다라트,mandalart,daily,dailyRoutine" />
+      </Head>
       <MainModal isOpen={isModalOpen} onClose={closeModal}>
         <ModalTitle theme={theme}>
           <div> </div>
