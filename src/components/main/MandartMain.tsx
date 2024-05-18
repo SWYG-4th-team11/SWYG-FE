@@ -4,7 +4,8 @@ import styled from '@emotion/styled';
 import Image from 'next/image';
 import DatePicker from 'react-datepicker';
 import { useTheme } from '@emotion/react';
-import { useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/router';
 import { Theme } from '@/providers/ThemeProvider/ThemeProvider';
 import IcoAdd from '../../../public/image/IcoAdd.svg';
 import IcoClose from '../../../public/image/IcoClose.svg';
@@ -283,11 +284,14 @@ const Desc = styled.div`
 
 const MandartMain = () => {
   const theme = useTheme() as Theme;
+  const router = useRouter();
   const [isModalOpen, setIsModalOpen] = useState(false);
   // const [isOn, setisOn] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
   const buttonRef = useRef<HTMLImageElement>(null);
-  const id = Number(localStorage.getItem('id'));
+  // const id =
+  //   typeof window !== 'undefined' ? Number(localStorage?.getItem('id')) : null;
+  const [id, setId] = useState(0);
   const { data: MandartData, refetch } = GetMandart(id);
   const [nowIndex, setNowIndex] = useState(0);
   const [title, setTitle] = useState<string>();
@@ -300,7 +304,14 @@ const MandartMain = () => {
     setStartDate(MandartData?.[0].subGoals[index].goalDate || new Date());
     setAchieved(MandartData?.[0].subGoals[index].achieved);
   };
-
+  useEffect(() => {
+    const storedId = Number(localStorage.getItem('id'));
+    if (storedId) {
+      setId(Number(storedId));
+    } else {
+      router.push('/');
+    }
+  }, []);
   const closeModal = () => {
     setIsModalOpen(false);
   };

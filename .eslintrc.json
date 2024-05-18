@@ -65,7 +65,8 @@
     "no-console": "off", // 이거는 나중에 지워서 콘솔 확인
     "function-paren-newline": "off",
     "no-alert": "off",
-    "object-curly-newline": "off"
+    "object-curly-newline": "off",
+    "linebreak-style": 0
   },
   "settings": {
     "import/resolver": {

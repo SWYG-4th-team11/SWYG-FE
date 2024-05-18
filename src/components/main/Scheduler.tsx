@@ -1,6 +1,7 @@
 import styled from '@emotion/styled';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import TodayMission from './TodayMission';
 import Mission from './Mission';
 import AddMission from './AddMission';
@@ -31,12 +32,22 @@ const MissionList = styled.div`
   scrollbar-width: none; /* 파이어폭스 */
 `;
 const Scheduler = () => {
+  const router = useRouter();
   const [nowDate, setNowDate] = useState<Date>(new Date());
   const [daily, setDaily] = useState<IRoutine[]>([]);
-  const id = Number(localStorage.getItem('id'));
+  // const id =
+  //   typeof window !== 'undefined' ? Number(localStorage?.getItem('id')) : null;
+  const [id, setId] = useState(0);
   const { data: CharacterData } = GetCharacter(id);
   const mandalartId = CharacterData?.[0]?.id ?? 0;
-
+  useEffect(() => {
+    const storedId = Number(localStorage.getItem('id'));
+    if (storedId) {
+      setId(Number(storedId));
+    } else {
+      router.push('/');
+    }
+  }, []);
   const { mutate: searchRoutineMutate } = useCustomMutation(
     'post',
     '/routine/view',

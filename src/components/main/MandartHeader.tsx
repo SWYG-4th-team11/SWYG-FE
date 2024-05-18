@@ -1,6 +1,8 @@
 import styled from '@emotion/styled';
 import Head from 'next/head';
 // import Image from 'next/image';
+import { useEffect, useState } from 'react';
+import { useRouter } from 'next/router';
 import { useTheme } from '@emotion/react';
 import { Theme } from '@/providers/ThemeProvider/ThemeProvider';
 // import IcoPencil from '../../../public/image/IcoPencil.svg';
@@ -61,7 +63,10 @@ const MyFavorite = styled.div`
 // `;
 const MandartHeader = () => {
   const theme = useTheme() as Theme;
-  const id = Number(localStorage.getItem('id'));
+  const router = useRouter();
+  // const id =
+  //   typeof window !== 'undefined' ? Number(localStorage?.getItem('id')) : null;
+  const [id, setId] = useState(0);
   const { data: MandartData } = GetMandart(id);
   const getDisDate = (nowDate: Date) => {
     const targetDate: Date = new Date(nowDate);
@@ -76,6 +81,14 @@ const MandartHeader = () => {
 
     return dayDifference;
   };
+  useEffect(() => {
+    const storedId = Number(localStorage.getItem('id'));
+    if (storedId) {
+      setId(Number(storedId));
+    } else {
+      router.push('/');
+    }
+  }, []);
   return (
     <Main>
       <Head>
