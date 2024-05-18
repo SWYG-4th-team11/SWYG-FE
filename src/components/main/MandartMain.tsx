@@ -1,4 +1,5 @@
 /* eslint-disable no-nested-ternary */
+import Head from 'next/head';
 import styled from '@emotion/styled';
 import Image from 'next/image';
 import DatePicker from 'react-datepicker';
@@ -360,6 +361,11 @@ const MandartMain = () => {
   `;
   return (
     <Main>
+      <Head>
+        <title>만다르트 메인</title>
+        <meta name="description" content="만다라트 페이지" />
+        <meta name="keywords" content="만다라트,mandalart" />
+      </Head>
       {isOpenCalender && (
         <DatePickerBack onClick={() => setIsOpenCalender(!isOpenCalender)} />
       )}

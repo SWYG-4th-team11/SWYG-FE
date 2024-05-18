@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import Head from 'next/head';
 import { useSetRecoilState } from 'recoil';
 import { useRouter } from 'next/router';
 import {
@@ -157,6 +158,12 @@ const Service = () => {
 
   return (
     <ResponsiveLayout>
+      <Head>
+        <title>만다르트 서비스</title>
+        <meta name="description" content="만다라트 서비스 페이지" />
+        <meta name="keywords" content="만다라트,mandalart,service,start" />
+      </Head>
+      ;
       <Container>
         <LineWrppaer>
           <div className="line" />

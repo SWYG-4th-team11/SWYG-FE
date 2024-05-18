@@ -1,4 +1,5 @@
 import { useTheme } from '@emotion/react';
+import Head from 'next/head';
 import { useState } from 'react';
 import styled from '@emotion/styled';
 import Image from 'next/image';
@@ -176,6 +177,14 @@ const Mission = ({ data, onChangeRoutine }: MissionProps) => {
   };
   return (
     <Main>
+      <Head>
+        <title>만다르트 미션</title>
+        <meta name="description" content="만다라트 미션" />
+        <meta
+          name="keywords"
+          content="만다라트,mandalart,daily,mission,routine"
+        />
+      </Head>
       <MainModal isOpen={isModalOpen} onClose={closeModal}>
         <InputTitle theme={theme}>목표 이름</InputTitle>
         <InputDetail

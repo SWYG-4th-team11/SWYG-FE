@@ -1,4 +1,5 @@
 import React, { ChangeEvent, useState } from 'react';
+import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useSetRecoilState } from 'recoil';
 import {
@@ -58,6 +59,11 @@ const LoginBoxTopCom = () => {
   };
   return (
     <LoginBoxTop>
+      <Head>
+        <title>만다르트 로그인</title>
+        <meta name="description" content="만다라트 로그인" />
+        <meta name="keywords" content="만다라트,mandalart,login" />
+      </Head>
       <div className="div-2">
         <InputWrapper className="div-3">
           <WrapperTitle>로그인</WrapperTitle>

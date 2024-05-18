@@ -1,4 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
+import Head from 'next/head';
 import styled from '@emotion/styled';
 
 import { useRouter } from 'next/router';
@@ -104,6 +105,12 @@ const ServiceInformation = () => {
 
   return (
     <ResponsiveLayout>
+      <Head>
+        <title>만다르트 소개</title>
+        <meta name="description" content="만다라트 소개" />
+        <meta name="keywords" content="만다라트,mandalart,introduction,소개" />
+      </Head>
+      ;
       <Container>
         {step === 1 && <First />}
         {step === 2 && <Seconds />}

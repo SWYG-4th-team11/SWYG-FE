@@ -155,7 +155,7 @@ const CharacterContainer = () => {
   const id = Number(localStorage.getItem('id'));
   const { data: QuoteData } = GetQuote();
   const { data: CharacterData } = GetCharacter(id);
-  const { data: LoginUserData } = GetLoginUser(id);
+  const { data: LoginUserData } = GetLoginUser({ id: Number(id) });
   const [prevLevel, setPrevLevel] = useState<number | undefined>(undefined);
   const [showLevelUpPopup, setShowLevelUpPopup] = useState(false);
 

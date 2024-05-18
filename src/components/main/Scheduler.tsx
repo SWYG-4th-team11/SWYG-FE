@@ -1,4 +1,5 @@
 import styled from '@emotion/styled';
+import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import TodayMission from './TodayMission';
 import Mission from './Mission';
@@ -61,6 +62,11 @@ const Scheduler = () => {
   }, [mandalartId, nowDate]);
   return (
     <SchedulerMain>
+      <Head>
+        <title>만다르트 스케쥴</title>
+        <meta name="description" content="만다라트 스케쥴" />
+        <meta name="keywords" content="만다라트,mandalart,scheduler,daily" />
+      </Head>
       <TodayMission onNowDateChange={handleNowDate} />
       <MissionList>
         {daily.map(
