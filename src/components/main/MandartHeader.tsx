@@ -43,16 +43,16 @@ const MyFavorite = styled.div`
   justify-content: center;
   align-items: center;
 `;
-const MyFavoriteItem = styled.div<{ theme: Theme }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 108px;
-  height: 40px;
-  border: 1px ${({ theme }) => theme.colors.green[0]} solid;
-  border-radius: 50px;
-  color: ${({ theme }) => theme.colors.green[0]};
-`;
+// const MyFavoriteItem = styled.div<{ theme: Theme }>`
+//   display: flex;
+//   justify-content: center;
+//   align-items: center;
+//   width: 108px;
+//   height: 40px;
+//   border: 1px ${({ theme }) => theme.colors.green[0]} solid;
+//   border-radius: 50px;
+//   color: ${({ theme }) => theme.colors.green[0]};
+// `;
 const IcoUpdateText = styled(Image)`
   padding-left: 8px;
   cursor: pointer;

@@ -2,21 +2,21 @@ import axios, { AxiosInstance } from 'axios';
 import { QueryClient } from '@tanstack/react-query';
 import { UrlBuilder } from '@/types/common';
 
-const protoc = process.env.NODE_ENV === 'development' ? 'http' : 'https';
+// const protoc = process.env.NODE_ENV === 'development' ? 'http' : 'https';
 
 // const getDomain = () =>
 //   process.env.NODE_ENV === 'development'
 //     ? process.env.DEV_BE_URL
 //     : process.env.PROD_BE_URL;
+// static instance: AxiosInstance = axios.create({
+//   baseURL: `${protoc}://${getDomain()}`, // 백엔드 서버 주소
+//   withCredentials: true, // 쿠키 전송 여부
+//   headers: {
+//     'Content-Type': 'application/json',
+//   },
+// });
 
 export class Api {
-  // static instance: AxiosInstance = axios.create({
-  //   baseURL: `${protoc}://${getDomain()}`, // 백엔드 서버 주소
-  //   withCredentials: true, // 쿠키 전송 여부
-  //   headers: {
-  //     'Content-Type': 'application/json',
-  //   },
-  // });
   static instance: AxiosInstance = axios.create({
     baseURL: 'http://3.34.192.12:8080/api', // 백엔드 서버 주소
     withCredentials: true, // 쿠키 전송 여부

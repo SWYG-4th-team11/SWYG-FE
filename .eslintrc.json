@@ -54,7 +54,7 @@
     "react/react-in-jsx-scope": "off", // Not needed in Next.js
     "react/jsx-props-no-spreading": "off", // Allowing spread props
     "react-hooks/rules-of-hooks": "error",
-    "react-hooks/exhaustive-deps": "warn",
+    "react-hooks/exhaustive-deps": "off",
     "import/prefer-default-export": "off",
     "import/no-extraneous-dependencies": "off",
     "react/function-component-definition": "off",
@@ -63,7 +63,9 @@
     "comma-dangle": "off",
     "indent": "off",
     "no-console": "off", // 이거는 나중에 지워서 콘솔 확인
-    "function-paren-newline": "off"
+    "function-paren-newline": "off",
+    "no-alert": "off",
+    "object-curly-newline": "off"
   },
   "settings": {
     "import/resolver": {

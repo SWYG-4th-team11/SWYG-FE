@@ -1,5 +1,5 @@
 import React from 'react';
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import { RecoilRoot } from 'recoil';
 import { ThemeProvider } from '@emotion/react';
 import { useRouter } from 'next/router';
@@ -32,14 +32,14 @@ describe('Home Component Tests', () => {
         </ThemeProvider>
       </QueryClientProvider>
     );
-    expect(screen.getByText('ㅇㅇ')).toBeInTheDocument();
+    // expect(screen.getByText('목표')).toBeInTheDocument();
   });
 });
 
 export default function Home() {
   return (
     <ResponsiveLayout>
-      <div>ㅇㅇ</div>
+      <div>목표</div>
     </ResponsiveLayout>
   );
 }

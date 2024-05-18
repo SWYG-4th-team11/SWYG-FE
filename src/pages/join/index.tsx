@@ -1,39 +1,22 @@
-import React, { useState } from 'react';
-import styled from '@emotion/styled';
-
+import React from 'react';
 import ResponsiveLayout from '@/layouts/ResponsiveLayout/ResponseiveLayout';
+import { Container, LoginBox } from '@/styles/login/loginStyles';
+import LoginBoxTopCom from '@/components/login/LoginBoxTopCom';
+import TitleBoxCom from '@/components/login/TitleBoxCom';
+import SocialIconsCom from '@/components/login/SocialIconsCom';
+import BottomBoxCom from '@/components/login/BottomBoxCom';
 
-import JoinResult from '@/components/join/JoinResult';
-import JoinBox from '@/components/join/JoinBox';
+const Login = () => (
+  <ResponsiveLayout>
+    <Container>
+      <TitleBoxCom />
+      <LoginBox>
+        <LoginBoxTopCom />
+        <SocialIconsCom />
+      </LoginBox>
+      <BottomBoxCom />
+    </Container>
+  </ResponsiveLayout>
+);
 
-const Container = styled.div(({ theme }) => ({
-  display: 'flex',
-  flexDirection: 'column',
-  justifyContent: 'center',
-  alignItems: 'center',
-  padding: '4rem', // 필요에 따라 조정하세요.
-  backgroundColor: theme.colors.white[0], // 테마의 회색 색상 사용
-  height: '100vh', // 전체 높이
-}));
-
-const Join = () => {
-  const [success, setSuccess] = useState<boolean>(false);
-
-  const onChangeSuccess = () => {
-    setSuccess(true);
-  };
-
-  return (
-    <ResponsiveLayout>
-      <Container>
-        {success ? (
-          <JoinResult />
-        ) : (
-          <JoinBox onChangeSuccess={onChangeSuccess} />
-        )}
-      </Container>
-    </ResponsiveLayout>
-  );
-};
-
-export default Join;
+export default Login;

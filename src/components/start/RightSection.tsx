@@ -1,12 +1,6 @@
 import Image from 'next/image';
 import React from 'react';
-import styled from '@emotion/styled';
-
-const ImageSection = styled.section({
-  flexBasis: '50%',
-  display: 'flex',
-  justifyContent: 'center',
-});
+import { ImageSection } from '@/styles/start/rightStyles';
 
 const RightSection = () => (
   <ImageSection>

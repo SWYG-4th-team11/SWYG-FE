@@ -24,7 +24,7 @@ export const NextButton = styled.button(({ theme }) => ({
 export const CheckButton = styled.button(({ theme }) => ({
   alignItems: 'center',
   border: '2px solid',
-  borderColor: theme.colors.green[0],
+  borderColor: theme.colors.gray[4],
   borderRadius: '6px',
   display: 'flex',
   gap: '10px',
@@ -33,13 +33,18 @@ export const CheckButton = styled.button(({ theme }) => ({
   padding: '16px',
   position: 'relative',
   width: '115px',
-  backgroundColor: theme.colors.white,
+  backgroundColor: 'inherit',
   color: theme.colors.green[0],
   fontSize: theme.typography.text3.fontSize,
   fontWeight: theme.typography.text3.fontWeight,
   lineHeight: `${theme.typography.text3.lineHeight}px`,
   cursor: 'pointer',
 }));
+
+export const GreenCheckButton = styled(CheckButton)`
+  background-color: ${(props) => props.theme.colors.green[0]};
+  color: ${(props) => props.theme.colors.white};
+`;
 
 export const WhiteSmallButton = styled(NextButton)`
   width: 429px;
