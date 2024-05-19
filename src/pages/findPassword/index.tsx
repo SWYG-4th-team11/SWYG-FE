@@ -9,9 +9,10 @@ import { BigInput } from '@/components/common/Input';
 import { NextButton } from '@/components/common/Button';
 import { useCustomMutation } from '@/hooks/reactQueryHooks/reactQueryHooks';
 import ResponsiveLayout from '@/layouts/ResponsiveLayout/ResponseiveLayout';
+import { LoadingSpinner } from '@/components/common/LoadingSpinner';
 
 const Container = styled(BaseWrapper)`
-  height: 100vh;
+  height: 60vh;
   flex-direction: column;
 `;
 
@@ -39,7 +40,7 @@ const FindPassword = () => {
     return Object.values(newErrors).every((v) => !v);
   };
 
-  const { mutate: findPasswordMutate } = useCustomMutation(
+  const { mutate: findPasswordMutate, isPending } = useCustomMutation(
     'post',
     '/send-mail/password',
     {
@@ -51,7 +52,6 @@ const FindPassword = () => {
       },
     }
   );
-
   const onSubmit = () => {
     console.log('email', email);
     if (validateInputs()) {
@@ -62,6 +62,7 @@ const FindPassword = () => {
   return (
     <ResponsiveLayout>
       <Container>
+        {isPending && <LoadingSpinner />}
         <Title>임시 비밀번호 발급</Title>
         <Description>
           임시 비밀번호를 발급받기 위한 이메일 주소를 입력 해 주세요.
@@ -75,7 +76,6 @@ const FindPassword = () => {
             onChange={(e) => setEmail(e.target.value)}
             error={errors.email}
           />
-
           <Button onClick={onSubmit}>임시 비밀번호 발송</Button>
         </FormContainer>
       </Container>

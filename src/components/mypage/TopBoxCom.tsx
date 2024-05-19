@@ -31,9 +31,11 @@ const TopBoxCom = () => {
           </div>
           <div className="smallWrapper">
             <span className="title">씨앗</span>
-            {authData.exp && (
+            {authData && (
               <ProgressBarContainer>
-                <ProgressBarFiller exp={authData.exp} />
+                <ProgressBarFiller
+                  exp={authData.exp !== null ? authData.exp : 0}
+                />
               </ProgressBarContainer>
             )}
           </div>

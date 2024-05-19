@@ -44,6 +44,8 @@ const MyPage = () => {
         updatedAt: LoginUserData.updatedAt,
         level: LoginUserData.level,
         exp: LoginUserData.exp,
+        mandalartExists: LoginUserData.mandalartExists,
+        mandalartId: LoginUserData.mandalartId,
       });
     }
   }, [LoginUserData, setAuthData]);
@@ -67,14 +69,14 @@ const MyPage = () => {
       <Container>
         <TopBoxCom />
         <BottomCom handleModalOpen={handleModalOpen} />
+        {isModalOpen && LoginUserData && id && (
+          <NicknameChangeModal
+            onClose={handleModalClose}
+            currentNickname={LoginUserData.nickname}
+            id={id}
+          />
+        )}
       </Container>
-      {isModalOpen && LoginUserData && id && (
-        <NicknameChangeModal
-          onClose={handleModalClose}
-          currentNickname={LoginUserData.nickname}
-          id={id}
-        />
-      )}
     </ResponsiveLayout>
   );
 };

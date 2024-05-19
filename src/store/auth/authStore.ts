@@ -9,6 +9,8 @@ interface IAuthStoreType {
   updatedAt: string | null;
   level: number | null;
   exp: number | null;
+  mandalartExists: boolean;
+  mandalartId: number | null;
 }
 
 const AuthStore = atom<IAuthStoreType>({
@@ -22,6 +24,8 @@ const AuthStore = atom<IAuthStoreType>({
     updatedAt: '',
     level: null,
     exp: null,
+    mandalartExists: false,
+    mandalartId: null,
   },
 });
 

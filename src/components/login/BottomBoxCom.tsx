@@ -6,7 +6,7 @@ const BottomBoxCom = () => {
   const router = useRouter();
 
   const onJoinPage = () => {
-    router.push('/join');
+    router.push('/signup');
   };
 
   const onPasswordPage = () => {

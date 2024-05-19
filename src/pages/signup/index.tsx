@@ -9,7 +9,7 @@ import JoinBox from '@/components/join/JoinBox';
 import { BaseWrapper } from '@/components/common/Container';
 
 const Container = styled(BaseWrapper)`
-  height: 100vh;
+  /* height: 100vh; */
   flex-direction: column;
 `;
 

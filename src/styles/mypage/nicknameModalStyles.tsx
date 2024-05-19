@@ -5,10 +5,8 @@ export const Wrapper = styled.div(({ theme }) => ({
   height: ' 200px',
   gap: ' 40px',
   padding: '40px 28px 28px 28px',
-  position: 'absolute',
+  position: 'fixed',
   top: '600px',
-  left: '50%',
-  right: '0',
   display: 'flex',
   flexDirection: 'column',
   alignItems: 'center',
@@ -20,6 +18,13 @@ export const Wrapper = styled.div(({ theme }) => ({
     width: 'fit-content',
     gap: '8px',
     padding: '10 0px',
+  },
+
+  '.closeImg': {
+    position: 'absolute',
+    right: '10px',
+    top: '10px',
+    cursor: 'pointer',
   },
 
   '.title': {

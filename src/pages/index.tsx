@@ -6,7 +6,7 @@ import ResponsiveLayout from '@/layouts/ResponsiveLayout/ResponseiveLayout';
 import LeftSection from '@/components/start/LeftSection';
 import RightSection from '@/components/start/RightSection';
 import { BaseWrapper } from '@/components/common/Container';
-import { GetLoginUser } from './api/auth/authApi';
+import { GetLoginUser, GetUser } from './api/auth/authApi';
 import AuthStore from '@/store/auth/authStore';
 
 const Container = styled(BaseWrapper)`
@@ -32,6 +32,7 @@ export const Start = () => {
     }
   );
 
+  console.log('LoginUserData', LoginUserData);
   useEffect(() => {
     if (LoginUserData) {
       setAuthData({
@@ -43,9 +44,14 @@ export const Start = () => {
         updatedAt: LoginUserData.updatedAt,
         level: LoginUserData.level,
         exp: LoginUserData.exp,
+        mandalartExists: LoginUserData.mandalartExists,
+        mandalartId: LoginUserData.mandalartId,
       });
     }
   }, [LoginUserData, setAuthData]);
+
+  const { data: getuserData } = GetUser();
+  console.log('getuserData', getuserData);
 
   return (
     <ResponsiveLayout>
@@ -54,7 +60,7 @@ export const Start = () => {
         <meta name="description" content="만다라트 페이지" />
         <meta name="keywords" content="만다라트,mandalart" />
       </Head>
-      ;
+
       <Container>
         <LeftSection />
 
