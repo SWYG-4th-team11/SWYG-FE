@@ -13,6 +13,7 @@ import { Title as TitleBase } from '@/components/common/Title';
 import { FormContainer } from '@/components/common/From';
 import { Label } from '@/components/common/Label';
 import { ConfirmText, ErrorText } from '@/components/common/Text';
+import { LoadingSpinner } from '../common/LoadingSpinner';
 
 const Title = styled(TitleBase)`
   width: 300px;
@@ -62,41 +63,40 @@ const PasswordChange = ({ id }: IPasswordChangeProps) => {
     }
   };
 
-  const { mutate: logoutMutate } = useCustomMutation('post', '/user/logout', {
-    onSuccess: () => {
-      setAuthData({
-        id: null,
-        isLogin: false,
-        email: '',
-        nickname: '',
-        createdAt: '',
-        updatedAt: '',
-        level: null,
-        exp: null,
-      });
-      Api.removeToken();
-      router.push('/');
-    },
-    onError: (error: string) => {
-      console.error(error);
-    },
-  });
+  const { mutate: logoutMutate, isPending: logoutIsPending } =
+    useCustomMutation('post', '/user/logout', {
+      onSuccess: () => {
+        setAuthData({
+          id: null,
+          isLogin: false,
+          email: '',
+          nickname: '',
+          createdAt: '',
+          updatedAt: '',
+          level: null,
+          exp: null,
+          mandalartExists: false,
+          mandalartId: null,
+        });
+        Api.removeToken();
+        router.push('/');
+      },
+      onError: (error: string) => {
+        console.error(error);
+      },
+    });
 
-  const { mutate: changePasswordMutate } = useCustomMutation(
-    'post',
-    '/user/update-password',
-    {
+  const { mutate: changePasswordMutate, isPending: changePasswordIsPending } =
+    useCustomMutation('post', '/user/update-password', {
       onSuccess: (data) => {
         if (data) {
           logoutMutate({ undefined });
-          router.push('/');
         }
       },
       onError: (error) => {
         console.error(error);
       },
-    }
-  );
+    });
 
   const handlePasswordChange = () => {
     console.log('password', password);
@@ -119,6 +119,8 @@ const PasswordChange = ({ id }: IPasswordChangeProps) => {
         <Description>
           주기적인 비밀번호 변경을 통해 개인정보를 안정하게 보호하세요
         </Description>
+
+        {(logoutIsPending || changePasswordIsPending) && <LoadingSpinner />}
 
         <FormContainer>
           <InputGroup>

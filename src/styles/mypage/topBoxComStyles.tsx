@@ -81,7 +81,7 @@ interface ProgressBarProps {
 export const ProgressBarContainer = styled.div(({ theme }) => ({
   width: '534px', // 전체 너비
   height: '10px',
-  backgroundColor: theme.colors.gray[5], // 그레이 색상 배경
+  backgroundColor: theme.colors.gray[4], // 그레이 색상 배경
   borderRadius: '5px',
   overflow: 'hidden', // 내용이 넘치지 않도록 설정
 }));

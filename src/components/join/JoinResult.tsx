@@ -12,7 +12,7 @@ import {
 const JoinResult = () => {
   const router = useRouter();
   const handleJoin = () => {
-    router.push('/login');
+    router.push('/join');
   };
   return (
     <Container>

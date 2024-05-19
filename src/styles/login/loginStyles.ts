@@ -22,7 +22,7 @@ export const TitleBox = styled.div`
 
 export const LoginBox = styled.div(({ theme }) => ({
   width: '664px',
-  height: '576px',
+  // height: '576px',
   backgroundColor: theme.colors.white,
   border: `1px solid ${theme.colors.gray[4]}`,
   borderRadius: '20px',

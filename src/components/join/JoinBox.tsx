@@ -14,6 +14,7 @@ import { Title } from '@/components/common/Title';
 import { ConfirmText, ErrorText } from '../common/Text';
 import { Label } from '../common/Label';
 import { FormContainer } from '../common/From';
+import { LoadingSpinner } from '../common/LoadingSpinner';
 
 interface IJoinBoxProps {
   onChangeSuccess: () => void;
@@ -28,50 +29,95 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
   const [isTime, setIsTime] = useState<boolean>(false);
 
   const [errors, setErrors] = useState({
-    nickName: false,
-    email: false,
-    password: false,
-    passwordCheck: false,
-    authCode: false,
+    nickName: '',
+    email: '',
+    password: '',
+    passwordCheck: '',
+    authCode: '',
+    general: '',
   });
 
   const [successInput, setSuccessInput] = useState({
-    nickName: false,
-    passwordCheck: false,
-    authCode: false,
+    nickName: '',
+    passwordCheck: '',
+    authCode: '',
+    email: '',
   });
 
   const validateInputs = () => {
     const newErrors = {
-      nickName: !nickName,
-      email: !email,
-      password: !password,
-      passwordCheck: !passwordCheck || password !== passwordCheck,
-      authCode: !authCode,
+      nickName: nickName ? '' : '닉네임을 입력해주세요.',
+      email: email ? '' : '이메일을 입력해주세요.',
+      password: password ? '' : '비밀번호를 입력해주세요.',
+      passwordCheck:
+        passwordCheck && password === passwordCheck
+          ? ''
+          : '비밀번호가 일치하지 않습니다.',
+      authCode: authCode ? '' : '인증번호를 입력해주세요.',
+      general: '',
     };
     setErrors(newErrors);
     return Object.values(newErrors).every((v) => !v);
   };
 
   const handleNickname = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNickName(e.target.value);
+    const newNickName = e.target.value;
+    setNickName(newNickName);
+
+    // 닉네임이 변경되면 중복 체크 상태와 에러 메시지 리셋
+    if (newNickName.length > 0) {
+      setErrors((prev) => ({
+        ...prev,
+        nickName: '',
+      }));
+      setSuccessInput((prev) => ({
+        ...prev,
+        nickName: '',
+      }));
+    }
   };
 
   const handleEmail = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setEmail(e.target.value);
+    const newEmail = e.target.value;
+    setEmail(newEmail);
+
+    // 이메일이 변경되면 인증 상태와 메시지 리셋
+    setIsTime(false);
+    setErrors((prev) => ({
+      ...prev,
+      email: '',
+    }));
+    setSuccessInput((prev) => ({
+      ...prev,
+      email: '',
+    }));
   };
 
   const handleAuthCode = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setAuthCode(e.target.value);
+    const newAuthCode = e.target.value;
+    setAuthCode(newAuthCode);
+    if (newAuthCode.length > 0) {
+      setErrors((prev) => ({
+        ...prev,
+        authCode: '',
+      }));
+    }
   };
+
   const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
     const newPassword = e.target.value;
     setPassword(newPassword);
-    // 비밀번호 일치 검사 업데이트 (비밀번호 변경시)
-    if (passwordCheck !== newPassword) {
-      setErrors((prev) => ({ ...prev, passwordCheck: true }));
-    } else {
-      setErrors((prev) => ({ ...prev, passwordCheck: false }));
+
+    // 비밀번호가 변경되면 비밀번호 확인 상태와 에러 메시지 리셋
+    if (newPassword.length > 0) {
+      setErrors((prev) => ({
+        ...prev,
+        password: '',
+      }));
+      setSuccessInput((prev) => ({
+        ...prev,
+        passwordCheck: '',
+      }));
     }
   };
 
@@ -80,30 +126,48 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
     setPasswordCheck(newPasswordCheck);
     // 비밀번호와 비밀번호 확인 일치 여부 검사
     if (password !== newPasswordCheck) {
-      setErrors((prev) => ({ ...prev, passwordCheck: true }));
+      setErrors((prev) => ({
+        ...prev,
+        passwordCheck: '비밀번호가 일치하지 않습니다.',
+      }));
+      setSuccessInput((prev) => ({
+        ...prev,
+        passwordCheck: '',
+      }));
     } else {
-      setSuccessInput((prev) => ({ ...prev, passwordCheck: true }));
-      setErrors((prev) => ({ ...prev, passwordCheck: false }));
+      setSuccessInput((prev) => ({
+        ...prev,
+        passwordCheck: '비밀번호가 일치합니다.',
+      }));
+      setErrors((prev) => ({ ...prev, passwordCheck: '' }));
     }
   };
 
-  // 이메일 중복체크
-  const { mutate: NicknameCheckMutate } = useCustomMutation(
-    'post',
-    '/user/nickname/check-unique',
-    {
+  // 닉네임 중복체크
+  const { mutate: NicknameCheckMutate, isPending: nicknameCheckIsPending } =
+    useCustomMutation('post', '/user/nickname/check-unique', {
       onSuccess: (data: CheckNicknameType) => {
         console.log('NicknameCheckMutate', data);
-        setSuccessInput((prev) => ({
-          ...prev,
-          nickName: data.isUnique,
-        }));
+        if (!data.isUnique) {
+          setErrors((prev) => ({
+            ...prev,
+            nickName: '이미 사용 중인 닉네임입니다.',
+          }));
+        } else {
+          setSuccessInput((prev) => ({
+            ...prev,
+            nickName: '사용 가능한 닉네임입니다.',
+          }));
+          setErrors((prev) => ({
+            ...prev,
+            nickName: '',
+          }));
+        }
       },
       onError: (error) => {
         console.error(error);
       },
-    }
-  );
+    });
 
   const handleNicknameCheck = () => {
     NicknameCheckMutate({
@@ -112,19 +176,28 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
   };
 
   // 이메일 인증
-  const { mutate: emailCheckMutate } = useCustomMutation(
-    'post',
-    '/send-mail/auth',
-    {
+  const { mutate: emailCheckMutate, isPending: emailCheckIsPending } =
+    useCustomMutation('post', '/send-mail/auth', {
       onSuccess: (data) => {
         console.log('emailCheckMutate', data);
         setIsTime(true);
+        setErrors((prev) => ({
+          ...prev,
+          email: '',
+        }));
+        setSuccessInput((prev) => ({
+          ...prev,
+          email: '인증번호를 발송했습니다. (3분안에 입력해주세요.)',
+        }));
       },
       onError: (error) => {
         console.error(error);
+        setErrors((prev) => ({
+          ...prev,
+          email: '이메일 인증에 실패했습니다.',
+        }));
       },
-    }
-  );
+    });
 
   const handleEmailCheck = () => {
     emailCheckMutate({
@@ -133,22 +206,27 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
   };
 
   // 인증번호 일치 체크
-  const { mutate: emailAuthCheckMutate } = useCustomMutation(
-    'post',
-    '/send-mail/verify',
-    {
+  const { mutate: emailAuthCheckMutate, isPending: emailAuthCheckIsPending } =
+    useCustomMutation('post', '/send-mail/verify', {
       onSuccess: (data) => {
         console.log('emailAuthCheckMutate', data);
         setSuccessInput((prev) => ({
           ...prev,
-          authCode: true,
+          authCode: '인증되었습니다.',
+        }));
+        setErrors((prev) => ({
+          ...prev,
+          authCode: '',
         }));
       },
       onError: (error) => {
         console.error(error);
+        setErrors((prev) => ({
+          ...prev,
+          authCode: '인증번호가 일치하지 않습니다.',
+        }));
       },
-    }
-  );
+    });
 
   const handleAuthCodeCheck = () => {
     emailAuthCheckMutate({
@@ -158,18 +236,32 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
   };
 
   // 회원가입
-  const { mutate: joinMutate } = useCustomMutation('post', '/user/signup', {
-    onSuccess: (data) => {
-      console.log(data);
-      onChangeSuccess();
-    },
-    onError: (error) => {
-      console.error(error);
-    },
-  });
+  const { mutate: joinMutate, isPending: joinIsPending } = useCustomMutation(
+    'post',
+    '/user/signup',
+    {
+      onSuccess: (data) => {
+        console.log(data);
+        onChangeSuccess();
+      },
+      onError: (error) => {
+        console.error(error);
+        setErrors((prev) => ({
+          ...prev,
+          general: '회원가입에 실패했습니다. 다시 시도해주세요.',
+        }));
+      },
+    }
+  );
 
   const handleJoin = () => {
-    if (validateInputs() && successInput.nickName && successInput.authCode) {
+    const isSubmit =
+      successInput.nickName !== '' &&
+      successInput.authCode !== '' &&
+      successInput.passwordCheck !== '' &&
+      successInput.email !== '';
+    console.log(isSubmit);
+    if (validateInputs() && isSubmit) {
       joinMutate({
         nickname: nickName,
         email,
@@ -186,6 +278,10 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
         <meta name="keywords" content="만다라트,mandalart,signup" />
       </Head>
       <BoxWrapper>
+        {(nicknameCheckIsPending ||
+          emailCheckIsPending ||
+          emailAuthCheckIsPending ||
+          joinIsPending) && <LoadingSpinner />}
         <Title>회원가입</Title>
         <FormContainer>
           <InputGroup>
@@ -195,15 +291,15 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
                 placeholder="닉네임을 입력 해주세요."
                 value={nickName}
                 onChange={handleNickname}
-                error={errors.nickName}
-                success={successInput.nickName}
+                error={errors.nickName !== ''}
+                success={successInput.nickName !== ''}
               />
 
               <CheckButton onClick={handleNicknameCheck}>중복 체크</CheckButton>
             </BtnWrapper>
-            {errors.nickName && <ErrorText>중복 닉네임입니다.</ErrorText>}
+            {errors.nickName && <ErrorText>{errors.nickName}</ErrorText>}
             {successInput.nickName && (
-              <ConfirmText>사용 가능한 닉네임입니다.</ConfirmText>
+              <ConfirmText>{successInput.nickName}</ConfirmText>
             )}
           </InputGroup>
 
@@ -215,32 +311,28 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
                 type="email"
                 value={email}
                 onChange={handleEmail}
-                error={errors.email}
+                error={errors.email !== ''}
               />
 
               <GreenCheckButton onClick={handleEmailCheck}>
                 인증
               </GreenCheckButton>
             </BtnWrapper>
-            {errors.email && <ErrorText>중복 닉네임입니다.</ErrorText>}
+            {errors.email && <ErrorText>{errors.email}</ErrorText>}
             <BtnWrapper>
               <SmallInput
                 placeholder="인증번호 8자리를 입력 해주세요"
                 value={authCode}
                 onChange={handleAuthCode}
-                error={errors.authCode}
-                success={successInput.authCode}
+                error={errors.authCode !== ''}
+                success={successInput.authCode !== ''}
               />
               <CheckButton onClick={handleAuthCodeCheck}>확인</CheckButton>
             </BtnWrapper>
-            {isTime && (
-              <ConfirmText>
-                인증번호를 발송했습니다(3분안에 입력해주세요.).
-              </ConfirmText>
-            )}
-            {errors.authCode && <ErrorText>인증번호가 틀렸습니다.</ErrorText>}
+            {isTime && <ConfirmText>{successInput.email}</ConfirmText>}
+            {errors.authCode && <ErrorText>{errors.authCode}</ErrorText>}
             {successInput.authCode && (
-              <ConfirmText>인증되었습니다.</ConfirmText>
+              <ConfirmText>{successInput.authCode}</ConfirmText>
             )}
           </MultiInputGroup>
 
@@ -252,34 +344,35 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
                 type="password"
                 value={password}
                 onChange={handlePassword}
-                error={errors.password}
+                error={errors.password !== ''}
               />
             </BtnWrapper>
-            {errors.password && <ErrorText>비밀번호를 작성해주세요</ErrorText>}
+            {errors.password && <ErrorText>{errors.password}</ErrorText>}
           </InputGroup>
 
           <InputGroup>
             <Label>비밀번호 확인</Label>
             <BtnWrapper>
               <BigInput
-                placeholder="4~16자의 영문 대소문자와 숫자만 입력"
+                placeholder="비밀번호를 다시 입력 해 주세요."
                 type="password"
                 value={passwordCheck}
                 onChange={handlePasswordCheck}
-                error={errors.passwordCheck}
-                success={successInput.passwordCheck}
+                error={errors.passwordCheck !== ''}
+                success={successInput.passwordCheck !== ''}
               />
             </BtnWrapper>
             {errors.passwordCheck && (
-              <ErrorText>비밀번호가 틀렸습니다.</ErrorText>
+              <ErrorText>{errors.passwordCheck}</ErrorText>
             )}
             {successInput.passwordCheck && (
-              <ConfirmText>비밀번호가 일치합니다.</ConfirmText>
+              <ConfirmText>{successInput.passwordCheck}</ConfirmText>
             )}
           </InputGroup>
         </FormContainer>
       </BoxWrapper>
       <NextButton onClick={handleJoin}>가입하기</NextButton>
+      {errors.general && <ErrorText>{errors.general}</ErrorText>}
     </>
   );
 };

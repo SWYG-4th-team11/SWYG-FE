@@ -84,6 +84,8 @@ const Service = () => {
         updatedAt: LoginUserData.updatedAt,
         level: LoginUserData.level,
         exp: LoginUserData.exp,
+        mandalartExists: LoginUserData.mandalartExists,
+        mandalartId: LoginUserData.mandalartId,
       });
     }
   }, [LoginUserData, setAuthData]);

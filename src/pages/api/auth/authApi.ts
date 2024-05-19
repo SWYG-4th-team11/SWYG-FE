@@ -14,6 +14,8 @@ export interface IUser {
   updatedAt: string;
   level: number;
   exp: number;
+  mandalartExists: boolean;
+  mandalartId: number | null;
 }
 
 // export const GetLoginUserSSR = (cookie: string) =>

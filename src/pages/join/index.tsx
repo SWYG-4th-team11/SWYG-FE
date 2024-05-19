@@ -3,7 +3,6 @@ import ResponsiveLayout from '@/layouts/ResponsiveLayout/ResponseiveLayout';
 import { Container, LoginBox } from '@/styles/login/loginStyles';
 import LoginBoxTopCom from '@/components/login/LoginBoxTopCom';
 import TitleBoxCom from '@/components/login/TitleBoxCom';
-import SocialIconsCom from '@/components/login/SocialIconsCom';
 import BottomBoxCom from '@/components/login/BottomBoxCom';
 
 const Login = () => (
@@ -12,7 +11,7 @@ const Login = () => (
       <TitleBoxCom />
       <LoginBox>
         <LoginBoxTopCom />
-        <SocialIconsCom />
+        {/* <SocialIconsCom /> */}
       </LoginBox>
       <BottomBoxCom />
     </Container>

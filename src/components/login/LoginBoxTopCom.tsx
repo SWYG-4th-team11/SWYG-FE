@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from 'react';
+import React, { ChangeEvent, KeyboardEvent, useState } from 'react';
 import Head from 'next/head';
 import { useRouter } from 'next/router';
 import { useSetRecoilState } from 'recoil';
@@ -14,6 +14,7 @@ import { useCustomMutation } from '@/hooks/reactQueryHooks/reactQueryHooks';
 import { ILoginResultType } from '@/types/loginType';
 import { Api } from '@/utils/apis';
 import AuthStore from '@/store/auth/authStore';
+import { ErrorText } from '../common/Text';
 
 const LoginBoxTopCom = () => {
   const router = useRouter();
@@ -21,7 +22,7 @@ const LoginBoxTopCom = () => {
 
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
-
+  const [isLogin, setIsLogin] = useState<boolean>(false);
   const onChangeEmail = (e: ChangeEvent<HTMLInputElement>) => {
     setEmail(e.target.value);
   };
@@ -45,8 +46,12 @@ const LoginBoxTopCom = () => {
           updatedAt: null,
           level: null,
           exp: null,
+          mandalartExists: false,
+          mandalartId: null,
         });
         router.push('/');
+      } else if (data.result === 'fail') {
+        setIsLogin(true);
       }
     },
     onError: (error) => {
@@ -57,6 +62,13 @@ const LoginBoxTopCom = () => {
   const onSubmit = () => {
     loginMutate({ email, password });
   };
+
+  const onKeyDown = (e: KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === 'Enter') {
+      onSubmit();
+    }
+  };
+
   return (
     <LoginBoxTop>
       <Head>
@@ -73,12 +85,14 @@ const LoginBoxTopCom = () => {
               type="email"
               value={email}
               onChange={onChangeEmail}
+              onKeyDown={onKeyDown}
             />
             <Input
               placeholder="비밀번호"
               type="password"
               value={password}
               onChange={onChangePassword}
+              onKeyDown={onKeyDown}
             />
           </div>
         </InputWrapper>
@@ -86,7 +100,7 @@ const LoginBoxTopCom = () => {
           <div className="div-5" />
         </Line>
       </div>
-
+      {isLogin && <ErrorText>아이디, 이메일 확인해주세요.</ErrorText>}
       <ButtonWrapper onClick={onSubmit}>
         <button type="button" className="text-wrapper-3">
           로그인

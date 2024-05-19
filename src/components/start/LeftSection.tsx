@@ -19,7 +19,8 @@ const LeftSection = () => {
   const authData = useRecoilValue(AuthStore);
 
   const handleStart = () => {
-    if (authData.level && authData.level >= 1) {
+    // router.push('/introduction');
+    if (authData.mandalartExists) {
       router.push('/main');
     } else {
       router.push('/introduction');

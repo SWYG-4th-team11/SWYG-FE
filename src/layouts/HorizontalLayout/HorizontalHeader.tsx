@@ -2,6 +2,8 @@ import React from 'react';
 import Image from 'next/image';
 import { useRouter } from 'next/router';
 import { useRecoilState } from 'recoil';
+import { ReactSVG } from 'react-svg';
+import styled from '@emotion/styled';
 import AuthStore from '@/store/auth/authStore';
 import calculateDaysSince from '@/utils/daysCalculate';
 import { useCustomMutation } from '@/hooks/reactQueryHooks/reactQueryHooks';
@@ -17,8 +19,20 @@ import {
   ServiceText,
 } from '@/styles/common/headerStyles';
 
+const IconWrapper = styled.div<{ isActive: boolean }>`
+  svg {
+    width: 32px;
+    height: 32px;
+    path {
+      fill: ${({ isActive }) => (isActive ? '#03C75A' : '#9B9B9B')};
+    }
+  }
+`;
+
 const HorizontalHeader = () => {
   const router = useRouter();
+  const currentPath = router.pathname;
+  console.log('currentPath', currentPath);
   const onLoginPage = () => {
     router.push('/join');
   };
@@ -37,6 +51,8 @@ const HorizontalHeader = () => {
         updatedAt: '',
         level: null,
         exp: null,
+        mandalartExists: false,
+        mandalartId: null,
       });
       Api.removeToken();
       router.push('/');
@@ -82,10 +98,12 @@ const HorizontalHeader = () => {
                 className="wrapper"
                 role="button"
                 tabIndex={0}
-                onClick={onMyPage}
-                onKeyDown={onMyPage}
+                onClick={onHome}
+                onKeyDown={onHome}
               >
-                <Image src="house.svg" alt="house" width={32} height={32} />
+                <IconWrapper isActive={currentPath === '/'}>
+                  <ReactSVG src="house.svg" />
+                </IconWrapper>
                 <div className="text">홈</div>
               </div>
               <div
@@ -95,7 +113,9 @@ const HorizontalHeader = () => {
                 onClick={onMyPage}
                 onKeyDown={onMyPage}
               >
-                <Image src="user.svg" alt="user" width={32} height={32} />
+                <IconWrapper isActive={currentPath === '/mypage'}>
+                  <ReactSVG src="user.svg" />
+                </IconWrapper>
                 <div className="text">MY</div>
               </div>
             </Menu>
