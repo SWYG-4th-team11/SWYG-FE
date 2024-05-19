@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 /* eslint-disable no-nested-ternary */
 import Head from 'next/head';
 import styled from '@emotion/styled';
@@ -312,6 +313,9 @@ const MandartMain = () => {
       router.push('/');
     }
   }, []);
+  useEffect(() => {
+    refetch();
+  }, [refetch]);
   const closeModal = () => {
     setIsModalOpen(false);
   };
@@ -407,14 +411,17 @@ const MandartMain = () => {
           </CloseBtn>
         </ModalTitle>
         <InputTitle theme={theme}>목표 이름</InputTitle>
-        <InputDetail
-          theme={theme}
-          placeholder="15자 이내로 입력해주세요."
-          defaultValue={MandartData?.[0].subGoals[nowIndex].title}
-          onChange={(e) => {
-            setTitle(e.target.value);
-          }}
-        />
+
+        {MandartData && MandartData[0] && (
+          <InputDetail
+            theme={theme}
+            placeholder="15자 이내로 입력해주세요."
+            defaultValue={MandartData[0].subGoals[nowIndex].title}
+            onChange={(e) => {
+              setTitle(e.target.value);
+            }}
+          />
+        )}
         <InputTitle theme={theme}>마감일</InputTitle>
         <InputDetailWithDay theme={theme}>
           <InputDay theme={theme}>
@@ -431,14 +438,16 @@ const MandartMain = () => {
           />
         </InputDetailWithDay>
         <InputTitle theme={theme}>메모(필수x)</InputTitle>
-        <InputDetail
-          theme={theme}
-          placeholder="메모를 입력해주세요."
-          defaultValue={MandartData?.[0].subGoals[nowIndex].content}
-          onChange={(e) => {
-            setContent(e.target.value);
-          }}
-        />
+        {MandartData && MandartData[0] && (
+          <InputDetail
+            theme={theme}
+            placeholder="메모를 입력해주세요."
+            defaultValue={MandartData?.[0].subGoals[nowIndex].content}
+            onChange={(e) => {
+              setContent(e.target.value);
+            }}
+          />
+        )}
         <InputTitle theme={theme}>달성여부</InputTitle>
         <InputDetailToggle>
           {achieved === false ? (
@@ -466,33 +475,35 @@ const MandartMain = () => {
         </ModalButtonYes>
         <ModalButtonNo>삭제하기</ModalButtonNo>
       </MainModal>
-      {MandartData?.[0].subGoals?.map((data, index) => {
-        let Box;
-        if (data.type === 'main') {
-          Box = data.achieved ? BoxMainAchieved : BoxMain;
-        } else if (data.type === 'middle') {
-          Box = data.achieved ? BoxMidAchieved : BoxMid;
-        } else if (data.type === 'small') {
-          Box = data.achieved ? BoxSmallAchieved : BoxSmall;
-        } else {
-          Box = BoxSmall;
-        }
+      {MandartData &&
+        MandartData[0] &&
+        MandartData?.[0].subGoals?.map((data, index) => {
+          let Box;
+          if (data.type === 'main') {
+            Box = data.achieved ? BoxMainAchieved : BoxMain;
+          } else if (data.type === 'middle') {
+            Box = data.achieved ? BoxMidAchieved : BoxMid;
+          } else if (data.type === 'small') {
+            Box = data.achieved ? BoxSmallAchieved : BoxSmall;
+          } else {
+            Box = BoxSmall;
+          }
 
-        return (
-          <Box key={data.id} theme={theme} onClick={() => openModal(index)}>
-            {!data.title ? (
-              <Image src={IcoAdd} alt="add" />
-            ) : data.title.length < 10 ? (
-              data.title
-            ) : (
-              `${data.title.slice(0, 10)}...`
-            )}
-            {data.achieved && (
-              <CheckIcon src={IcoCheck} alt="check" width={40} height={40} />
-            )}
-          </Box>
-        );
-      })}
+          return (
+            <Box key={data.id} theme={theme} onClick={() => openModal(index)}>
+              {!data.title ? (
+                <Image src={IcoAdd} alt="add" />
+              ) : data.title.length < 10 ? (
+                data.title
+              ) : (
+                `${data.title.slice(0, 10)}...`
+              )}
+              {data.achieved && (
+                <CheckIcon src={IcoCheck} alt="check" width={40} height={40} />
+              )}
+            </Box>
+          );
+        })}
     </Main>
   );
 };

@@ -1,3 +1,4 @@
+/* eslint-disable operator-linebreak */
 import styled from '@emotion/styled';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
@@ -34,7 +35,7 @@ const MissionList = styled.div`
 const Scheduler = () => {
   const router = useRouter();
   const [nowDate, setNowDate] = useState<Date>(new Date());
-  const [daily, setDaily] = useState<IRoutine[]>([]);
+  const [daily, setDaily] = useState<IRoutine[]>();
   // const id =
   //   typeof window !== 'undefined' ? Number(localStorage?.getItem('id')) : null;
   const [id, setId] = useState(0);
@@ -80,18 +81,19 @@ const Scheduler = () => {
       </Head>
       <TodayMission onNowDateChange={handleNowDate} />
       <MissionList>
-        {daily.map(
-          (data) => (
-            // if (!data.isChecked) {
-            <Mission
-              key={data.id}
-              data={data}
-              onChangeRoutine={handleRoutine}
-            />
-          )
-          // }
-          // return null;
-        )}
+        {daily &&
+          daily.map(
+            (data) => (
+              // if (!data.isChecked) {
+              <Mission
+                key={data.id}
+                data={data}
+                onChangeRoutine={handleRoutine}
+              />
+            )
+            // }
+            // return null;
+          )}
       </MissionList>
       <AddMission onChangeRoutine={handleRoutine} />
     </SchedulerMain>
