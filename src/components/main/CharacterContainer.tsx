@@ -235,7 +235,7 @@ const CharacterContainer = () => {
           <Image
             src={getImageManda(CharacterData?.[0]?.level || 0)}
             alt="character"
-            width={200}
+            width={160}
             height={160}
           />
         </ImageContainer>
