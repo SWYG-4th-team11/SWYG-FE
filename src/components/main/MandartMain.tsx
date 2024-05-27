@@ -31,7 +31,7 @@ const BoxMain = styled.div<{ theme: Theme }>`
   align-items: center;
   width: 136px;
   height: 92px;
-  border: 1px solid black;
+  border: 1px solid rgba(128, 128, 128, 0.6);
   border-radius: 10px;
   cursor: pointer;
   margin: 2px 2px;
@@ -54,7 +54,7 @@ const BoxMainAchieved = styled.div<{ theme: Theme }>`
   align-items: center;
   width: 136px;
   height: 92px;
-  border: 1px solid black;
+  border: 1px solid rgba(128, 128, 128, 0.6);
   border-radius: 10px;
   cursor: pointer;
   margin: 2px 2px;
@@ -79,7 +79,7 @@ const BoxMid = styled.div<{ theme: Theme }>`
   align-items: center;
   width: 136px;
   height: 92px;
-  border: 1px solid black;
+  border: 1px solid rgba(128, 128, 128, 0.6);
   border-radius: 10px;
   cursor: pointer;
   margin: 2px 2px;
@@ -102,7 +102,7 @@ const BoxMidAchieved = styled.div<{ theme: Theme }>`
   align-items: center;
   width: 136px;
   height: 92px;
-  border: 1px solid black;
+  border: 1px solid rgba(128, 128, 128, 0.6);
   border-radius: 10px;
   cursor: pointer;
   margin: 2px 2px;
@@ -127,7 +127,7 @@ const BoxSmall = styled.div<{ theme: Theme }>`
   align-items: center;
   width: 136px;
   height: 92px;
-  border: 1px solid black;
+  border: 1px solid rgba(128, 128, 128, 0.6);
   border-radius: 10px;
   cursor: pointer;
   margin: 2px 2px;
@@ -149,7 +149,7 @@ const BoxSmallAchieved = styled.div<{ theme: Theme }>`
   align-items: center;
   width: 136px;
   height: 92px;
-  border: 1px solid black;
+  border: 1px solid rgba(128, 128, 128, 0.6);
   border-radius: 10px;
   cursor: pointer;
   margin: 2px 2px;
@@ -338,6 +338,16 @@ const MandartMain = () => {
       },
     }
   );
+  const handleDeleteMandart = () => {
+    updateMandartMutate({
+      id: MandartData?.[0].subGoals[nowIndex].id,
+      title,
+      content,
+      goalDate,
+      achieved: false,
+    });
+    closeModal();
+  };
   const handleUpdateMandart = () => {
     updateMandartMutate({
       id: MandartData?.[0].subGoals[nowIndex].id,
@@ -473,7 +483,7 @@ const MandartMain = () => {
         <ModalButtonYes theme={theme} onClick={handleUpdateMandart}>
           수정완료
         </ModalButtonYes>
-        <ModalButtonNo>삭제하기</ModalButtonNo>
+        <ModalButtonNo onClick={handleDeleteMandart}>삭제하기</ModalButtonNo>
       </MainModal>
       {MandartData &&
         MandartData[0] &&

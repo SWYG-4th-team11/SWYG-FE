@@ -33,8 +33,8 @@ const MandartContainer = styled.div`
   display: flex;
   justify-content: flex-start;
   flex-direction: column;
-  border: 1px solid gray;
-  border-radius: 30px 30px 30px 30px;
+  border: 1px solid rgba(128, 128, 128, 0.6);
+  border-radius: 18px 18px 18px 18px;
   padding: 20px 0px 30px 0px;
   margin: 80px 0px 30px 10px;
   width: 925px;

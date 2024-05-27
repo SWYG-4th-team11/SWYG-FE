@@ -29,9 +29,10 @@ const CheckBox = styled.input`
   appearance: none;
   margin-left: 20px;
   width: 40px;
-  height: 40px;
+  /* height: 40px; */
+  aspect-ratio: 1/1;
   border: 1.5px solid gainsboro;
-  border-radius: 50px;
+  border-radius: 50%;
 
   &:checked {
     border-color: transparent;

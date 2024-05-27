@@ -30,9 +30,9 @@ const Main = styled.div`
   flex-direction: column;
   width: 100%;
   height: 426px;
-  border: 1px solid gray;
+  border: 1px solid rgba(128, 128, 128, 0.6);
   margin-top: 20px;
-  border-radius: 50px;
+  border-radius: 18px 18px 18px 18px;
 `;
 const CharacterDiv = styled.div`
   display: flex;
@@ -235,7 +235,7 @@ const CharacterContainer = () => {
           <Image
             src={getImageManda(CharacterData?.[0]?.level || 0)}
             alt="character"
-            width={200}
+            width={160}
             height={160}
           />
         </ImageContainer>
