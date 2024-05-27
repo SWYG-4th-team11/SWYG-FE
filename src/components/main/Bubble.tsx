@@ -12,7 +12,9 @@ const BubbleWrapper = styled.div`
   padding: 24px 20px;
   gap: 10px;
   margin-bottom: 10px;
-
+  display: flex;
+  justify-content: center;
+  align-items: center;
   &:after {
     content: '';
     position: absolute;
@@ -26,19 +28,18 @@ const BubbleWrapper = styled.div`
     left: 120px;
   }
 `;
+
 const BubbleText = styled.div<{ theme: Theme }>`
-  display: flex;
-  justify-content: center;
-  align-items: center;
   font-size: ${({ theme }) => theme.typography.text4.fontSize};
-  /* font-weight: ${({ theme }) => theme.typography.text4.fontWeight}; */
   font-weight: bold;
   line-height: 30px;
   color: ${({ theme }) => theme.colors.gray[0]};
 `;
+
 interface BubbleProps {
   children: string;
 }
+
 const Bubble = ({ children }: BubbleProps) => {
   const theme = useTheme() as Theme;
   return (
@@ -47,4 +48,5 @@ const Bubble = ({ children }: BubbleProps) => {
     </BubbleWrapper>
   );
 };
+
 export default Bubble;

@@ -15,6 +15,10 @@ const Main = styled.div`
   width: 853px;
   height: 88px;
   padding-left: 30px;
+  @media (max-width: 1300px) {
+    width: 76px;
+    height: 32px;
+  }
 `;
 const TitleText = styled.div<{ theme: Theme }>`
   display: flex;
@@ -47,16 +51,17 @@ const MyFavorite = styled.div`
   justify-content: center;
   align-items: center;
 `;
-// const MyFavoriteItem = styled.div<{ theme: Theme }>`
-//   display: flex;
-//   justify-content: center;
-//   align-items: center;
-//   width: 108px;
-//   height: 40px;
-//   border: 1px ${({ theme }) => theme.colors.green[0]} solid;
-//   border-radius: 50px;
-//   color: ${({ theme }) => theme.colors.green[0]};
-// `;
+const MyFavoriteItem = styled.div<{ theme: Theme }>`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 108px;
+  height: 40px;
+  font-weight: bold;
+  border: 1px ${({ theme }) => theme.colors.green[0]} solid;
+  border-radius: 50px;
+  color: ${({ theme }) => theme.colors.green[0]};
+`;
 // const IcoUpdateText = styled(Image)`
 //   padding-left: 8px;
 //   cursor: pointer;
@@ -106,7 +111,17 @@ const MandartHeader = () => {
         </MainText>
       </TitleText>
       <MyFavorite>
-        {/* <MyFavoriteItem theme={theme}>#디자인</MyFavoriteItem> */}
+        {/* <MyFavoriteItem theme={theme}>
+          {`# ${MandartData?.[0].categories[0]}`}
+        </MyFavoriteItem> */}
+        {MandartData?.[0]?.categories.map((value, index) => {
+          if (index > 2) return null;
+          return (
+            <MyFavoriteItem key={`${index + 1}${value}`} theme={theme}>
+              {`# ${value}`}
+            </MyFavoriteItem>
+          );
+        })}
       </MyFavorite>
     </Main>
   );
