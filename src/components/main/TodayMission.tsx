@@ -19,7 +19,7 @@ const TodayMission = ({ onNowDateChange }: TodayMissionProps) => {
     align-items: center;
     width: 100%;
     height: 88px;
-    border-bottom: 1px solid gray;
+    border-bottom: 1px solid rgba(128, 128, 128, 0.6);
     font-weight: bold;
   `;
   const ImageDiv = styled.div`

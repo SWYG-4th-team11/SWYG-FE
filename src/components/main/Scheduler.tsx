@@ -17,8 +17,8 @@ const SchedulerMain = styled.div`
   display: flex-start;
   flex-direction: column;
   justify-content: center;
-  border: 1px solid gray;
-  border-radius: 30px 30px 30px 30px;
+  border: 1px solid rgba(128, 128, 128, 0.6);
+  border-radius: 18px 18px 18px 18px;
   width: 100%;
   height: 560px;
 `;
@@ -81,19 +81,18 @@ const Scheduler = () => {
       </Head>
       <TodayMission onNowDateChange={handleNowDate} />
       <MissionList>
-        {daily &&
-          daily.map(
-            (data) => (
-              // if (!data.isChecked) {
-              <Mission
-                key={data.id}
-                data={data}
-                onChangeRoutine={handleRoutine}
-              />
-            )
-            // }
-            // return null;
-          )}
+        {daily?.map(
+          (data) => (
+            // if (!data.isChecked) {
+            <Mission
+              key={data.id}
+              data={data}
+              onChangeRoutine={handleRoutine}
+            />
+          )
+          // }
+          // return null;
+        )}
       </MissionList>
       <AddMission onChangeRoutine={handleRoutine} />
     </SchedulerMain>
