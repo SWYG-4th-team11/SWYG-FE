@@ -4,25 +4,55 @@ import { useRecoilValue } from 'recoil';
 import {
   Title,
   TopBox,
-  Description,
+  Description2,
   LineWrapper,
   ProgressBarContainer,
   ProgressBarFiller,
+  ImageContainer,
 } from '@/styles/mypage/topBoxComStyles';
 import AuthStore from '@/store/auth/authStore';
+import { GetQuote } from '@/pages/api/main/test';
+import Bubble from '../main/Bubble';
+import ImgManda from '../../../public/image/ImgManda.svg';
+import ImgManda2 from '../../../public/image/ImgManda2.svg';
+import ImgManda3 from '../../../public/image/ImgManda3.svg';
+import ImgManda4 from '../../../public/image/ImgManda4.svg';
+import ImgManda5 from '../../../public/image/ImgManda5.svg';
 
 const TopBoxCom = () => {
   const authData = useRecoilValue(AuthStore);
-
+  const { data: QuoteData } = GetQuote();
+  const getCharcterTitle = (level: number | null) => {
+    if (level === 1) return '씨앗';
+    if (level === 2) return '새싹';
+    if (level === 3) return '줄기';
+    if (level === 4) return '꽃';
+    return '나무';
+  };
+  const getImageManda = (level: number | null) => {
+    if (level === 1) return ImgManda;
+    if (level === 2) return ImgManda2;
+    if (level === 3) return ImgManda3;
+    if (level === 4) return ImgManda4;
+    return ImgManda5;
+  };
   return (
     <>
       <Title>My</Title>
       <TopBox>
-        <Image src="ball.svg" alt="ball" width={190} height={215} />
-        <Description>
-          <p>가장 어려운 일을 하는 것은 시작하는 것이다.</p>
-          <p> 나머지는 자연스럽게 따라온다. 2줄까지 작성가능</p>
-        </Description>
+        <ImageContainer>
+          <Image
+            src={getImageManda(authData.level)}
+            alt="ball"
+            width={180}
+            height={195}
+          />
+        </ImageContainer>
+        <Description2>
+          <Bubble>
+            {QuoteData?.content ? QuoteData.content : '시작이 반이다'}
+          </Bubble>
+        </Description2>
 
         <LineWrapper>
           <div className="smallTitle">
@@ -30,7 +60,7 @@ const TopBoxCom = () => {
             {authData.level}
           </div>
           <div className="smallWrapper">
-            <span className="title">씨앗</span>
+            <span className="title">{getCharcterTitle(authData.level)}</span>
             {authData && (
               <ProgressBarContainer>
                 <ProgressBarFiller
@@ -39,7 +69,7 @@ const TopBoxCom = () => {
               </ProgressBarContainer>
             )}
           </div>
-          <div className="description">레벨업까지 목표달성 3/6</div>
+          <div className="description">{`레밸업까지 목표달성 ${authData.exp}/100`}</div>
         </LineWrapper>
       </TopBox>
     </>

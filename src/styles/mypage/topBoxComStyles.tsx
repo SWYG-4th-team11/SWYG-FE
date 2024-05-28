@@ -30,6 +30,17 @@ export const Description = styled.div(({ theme }) => ({
   right: '20px',
 }));
 
+export const Description2 = styled.div(({ theme }) => ({
+  color: theme.colors.gray[0],
+  fontSize: theme.typography.text3.fontSize,
+  fontWeight: theme.typography.text3.fontWeight,
+  lineHeight: `${theme.typography.text3.lineHeight}px`,
+  position: 'absolute',
+  top: '-25px',
+  right: '-20px',
+  width: '1000px',
+}));
+
 export const LineWrapper = styled.div(({ theme }) => ({
   width: '916px',
   height: '44px',
@@ -95,3 +106,17 @@ export const ProgressBarFiller = styled.div<ProgressBarProps>(
     transition: 'width 0.2s ease-in', // 너비 변경 시 애니메이션 효과
   })
 );
+
+export const ImageContainer = styled.div`
+  animation: moveUpDown 2s ease-in-out infinite;
+
+  @keyframes moveUpDown {
+    0%,
+    100% {
+      transform: translateY(0);
+    }
+    50% {
+      transform: translateY(-5px);
+    }
+  }
+`;
