@@ -81,8 +81,8 @@ const PasswordChange = ({ id }: IPasswordChangeProps) => {
         Api.removeToken();
         router.push('/');
       },
-      onError: (error: string) => {
-        console.error(error);
+      onError: () => {
+        alert('다시 시도해 주세요.');
       },
     });
 
@@ -93,18 +93,13 @@ const PasswordChange = ({ id }: IPasswordChangeProps) => {
           logoutMutate({ undefined });
         }
       },
-      onError: (error) => {
-        console.error(error);
+      onError: () => {
+        alert('다시 시도해 주세요.');
       },
     });
 
   const handlePasswordChange = () => {
-    console.log('password', password);
-    console.log('newPassword', newPassword);
-    console.log('newPasswordCheck', newPasswordCheck);
-    console.log('id', id);
     if (validateInputs()) {
-      console.log('password', password);
       changePasswordMutate({
         id,
         password,

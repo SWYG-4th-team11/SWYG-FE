@@ -32,7 +32,6 @@ const IconWrapper = styled.div<{ isActive: boolean }>`
 const HorizontalHeader = () => {
   const router = useRouter();
   const currentPath = router.pathname;
-  console.log('currentPath', currentPath);
   const onLoginPage = () => {
     router.push('/join');
   };
@@ -57,8 +56,8 @@ const HorizontalHeader = () => {
       Api.removeToken();
       router.push('/');
     },
-    onError: (error: string) => {
-      console.error(error);
+    onError: () => {
+      alert('다시 시도해 주세요.');
     },
   });
 

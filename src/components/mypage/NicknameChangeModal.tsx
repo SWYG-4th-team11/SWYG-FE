@@ -34,8 +34,8 @@ const NicknameChangeModal = ({
           onClose();
         }
       },
-      onError: (error) => {
-        console.error(error);
+      onError: () => {
+        alert('다시 시도해 주세요.');
       },
     }
   );

@@ -47,13 +47,12 @@ const FindPassword = () => {
       onSuccess: () => {
         router.push('/join');
       },
-      onError: (error) => {
-        console.log(error);
+      onError: () => {
+        alert('다시 시도해 주세요.');
       },
     }
   );
   const onSubmit = () => {
-    console.log('email', email);
     if (validateInputs()) {
       findPasswordMutate({ email });
     }

@@ -6,7 +6,7 @@ import ResponsiveLayout from '@/layouts/ResponsiveLayout/ResponseiveLayout';
 import LeftSection from '@/components/start/LeftSection';
 import RightSection from '@/components/start/RightSection';
 import { BaseWrapper } from '@/components/common/Container';
-import { GetLoginUser, GetUser } from './api/auth/authApi';
+import { GetLoginUser } from './api/auth/authApi';
 import AuthStore from '@/store/auth/authStore';
 
 const Container = styled(BaseWrapper)`
@@ -32,7 +32,6 @@ export const Start = () => {
     }
   );
 
-  console.log('LoginUserData', LoginUserData);
   useEffect(() => {
     if (LoginUserData) {
       setAuthData({
@@ -49,9 +48,6 @@ export const Start = () => {
       });
     }
   }, [LoginUserData, setAuthData]);
-
-  const { data: getuserData } = GetUser();
-  console.log('getuserData', getuserData);
 
   return (
     <ResponsiveLayout>

@@ -120,23 +120,14 @@ const Service = () => {
     onSuccess: () => {
       router.push('/main');
     },
-    onError: (error) => {
-      alert('목표 생성에 실패했습니다.');
-      console.error(error);
+    onError: () => {
+      alert('다시 시도해 주세요');
     },
   });
 
   const onSubmit = () => {
-    console.log('submit');
-    console.log(selectedTags);
-    console.log(title);
-    console.log(due);
-    console.log(memo);
-
     const dueDate = new Date(due);
     const dueISOString = dueDate.toISOString();
-
-    console.log('ISO 형식의 마감일:', dueISOString);
 
     if (selectedTags.length === 0) {
       alert('관심 분야를 선택해주세요.');

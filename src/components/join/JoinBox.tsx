@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import Head from 'next/head';
+import { useSetRecoilState } from 'recoil';
 import { useCustomMutation } from '@/hooks/reactQueryHooks/reactQueryHooks';
 import { CheckButton, GreenCheckButton, NextButton } from '../common/Button';
 import { SmallInput, BigInput } from '../common/Input';
@@ -15,12 +16,14 @@ import { ConfirmText, ErrorText } from '../common/Text';
 import { Label } from '../common/Label';
 import { FormContainer } from '../common/From';
 import { LoadingSpinner } from '../common/LoadingSpinner';
+import SignupNickname from '@/store/signup/SignupStore';
 
 interface IJoinBoxProps {
   onChangeSuccess: () => void;
 }
 
 const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
+  const setNickNameStore = useSetRecoilState(SignupNickname);
   const [nickName, setNickName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
@@ -147,7 +150,6 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
   const { mutate: NicknameCheckMutate, isPending: nicknameCheckIsPending } =
     useCustomMutation('post', '/user/nickname/check-unique', {
       onSuccess: (data: CheckNicknameType) => {
-        console.log('NicknameCheckMutate', data);
         if (!data.isUnique) {
           setErrors((prev) => ({
             ...prev,
@@ -164,8 +166,8 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
           }));
         }
       },
-      onError: (error) => {
-        console.error(error);
+      onError: () => {
+        alert('다시 시도해주세요.');
       },
     });
 
@@ -178,8 +180,7 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
   // 이메일 인증
   const { mutate: emailCheckMutate, isPending: emailCheckIsPending } =
     useCustomMutation('post', '/send-mail/auth', {
-      onSuccess: (data) => {
-        console.log('emailCheckMutate', data);
+      onSuccess: () => {
         setIsTime(true);
         setErrors((prev) => ({
           ...prev,
@@ -190,8 +191,8 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
           email: '인증번호를 발송했습니다. (3분안에 입력해주세요.)',
         }));
       },
-      onError: (error) => {
-        console.error(error);
+      onError: () => {
+        alert('다시 시도해주세요.');
         setErrors((prev) => ({
           ...prev,
           email: '이메일 인증에 실패했습니다.',
@@ -208,8 +209,7 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
   // 인증번호 일치 체크
   const { mutate: emailAuthCheckMutate, isPending: emailAuthCheckIsPending } =
     useCustomMutation('post', '/send-mail/verify', {
-      onSuccess: (data) => {
-        console.log('emailAuthCheckMutate', data);
+      onSuccess: () => {
         setSuccessInput((prev) => ({
           ...prev,
           authCode: '인증되었습니다.',
@@ -219,8 +219,8 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
           authCode: '',
         }));
       },
-      onError: (error) => {
-        console.error(error);
+      onError: () => {
+        alert('다시 시도해주세요.');
         setErrors((prev) => ({
           ...prev,
           authCode: '인증번호가 일치하지 않습니다.',
@@ -240,12 +240,12 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
     'post',
     '/user/signup',
     {
-      onSuccess: (data) => {
-        console.log(data);
+      onSuccess: () => {
+        setNickNameStore(nickName);
         onChangeSuccess();
       },
-      onError: (error) => {
-        console.error(error);
+      onError: () => {
+        alert('다시 시도해주세요.');
         setErrors((prev) => ({
           ...prev,
           general: '회원가입에 실패했습니다. 다시 시도해주세요.',
@@ -255,12 +255,12 @@ const JoinBox = ({ onChangeSuccess }: IJoinBoxProps) => {
   );
 
   const handleJoin = () => {
+    onChangeSuccess();
     const isSubmit =
       successInput.nickName !== '' &&
       successInput.authCode !== '' &&
       successInput.passwordCheck !== '' &&
       successInput.email !== '';
-    console.log(isSubmit);
     if (validateInputs() && isSubmit) {
       joinMutate({
         nickname: nickName,

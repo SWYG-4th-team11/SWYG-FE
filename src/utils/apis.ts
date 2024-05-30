@@ -2,23 +2,10 @@ import axios, { AxiosInstance } from 'axios';
 import { QueryClient } from '@tanstack/react-query';
 import { UrlBuilder } from '@/types/common';
 
-// const protoc = process.env.NODE_ENV === 'development' ? 'http' : 'https';
-
-// const getDomain = () =>
-//   process.env.NODE_ENV === 'development'
-//     ? process.env.DEV_BE_URL
-//     : process.env.PROD_BE_URL;
-// static instance: AxiosInstance = axios.create({
-//   baseURL: `${protoc}://${getDomain()}`, // 백엔드 서버 주소
-//   withCredentials: true, // 쿠키 전송 여부
-//   headers: {
-//     'Content-Type': 'application/json',
-//   },
-// });
-
 export class Api {
   static instance: AxiosInstance = axios.create({
-    baseURL: 'http://3.34.192.12:8080/api', // 백엔드 서버 주소
+    // baseURL: process.env.NEXT_PUBLIC_DEV_BE_URL, // 백엔드 서버 주소
+    baseURL: '/api', // 백엔드 서버 주소
     withCredentials: true, // 쿠키 전송 여부
     headers: {
       'Content-Type': 'application/json',
@@ -85,19 +72,15 @@ export const buildQueryKey = <T>(
 };
 
 Api.instance.interceptors.request.use(
-  (config) => {
-    console.log(`Request URL: ${config.baseURL}${config.url}`);
-    // console.log('Request Headers: ', config.headers);
-    // console.log('Request Method: ', config.method);
-    // console.log('Request Data: ', config);
+  (config) =>
+    // console.log(`Request URL: ${config.baseURL}${config.url}`);
+
     // 요청의 헤더, 메소드, 데이터 등 추가 정보를 찍고 싶다면 여기서 추가로 로그를 찍을 수 있습니다.
-    return config;
-  },
-  (error) => {
+    config,
+  (error) =>
     // 요청 설정에 문제가 있어 실패한 경우의 에러 처리를 여기서 합니다.
-    console.log('error', error);
-    return Promise.reject(error);
-  }
+    // console.log('error', error);
+    Promise.reject(error)
 );
 
 export const queryClient = new QueryClient();

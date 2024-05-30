@@ -24,7 +24,10 @@ export const Text = styled.div(({ theme }) => ({
 }));
 
 export const Description = styled.div(({ theme }) => ({
-  width: '356px',
+  display: 'flex',
+  justifyContent: 'center',
+  alignItems: 'center',
+  width: '600px',
   height: '68px',
   fontSize: theme.typography.title1.fontSize,
   fontWeight: theme.typography.title1.fontWeight,

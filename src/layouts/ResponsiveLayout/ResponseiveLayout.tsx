@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import { useRecoilValue } from 'recoil';
 import HorizontalLayout from '../HorizontalLayout/HorizontalLayout';
-import MobileLayout from '../MobileLayout/MobileLayout';
 import LayoutStore from '@/store/common/LayoutStore';
 
 interface ResponsiveLayoutProps {
@@ -15,8 +14,8 @@ const ResponsiveLayout = ({ children }: ResponsiveLayoutProps) => {
     switch (layout) {
       case 'Horizontal':
         return HorizontalLayout;
-      case 'mobile':
-        return MobileLayout;
+      // case 'mobile':
+      //   return MobileLayout;
       default:
         throw new Error(`Invalid layout: ${layout}`);
     }

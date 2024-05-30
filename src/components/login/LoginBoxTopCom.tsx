@@ -33,7 +33,6 @@ const LoginBoxTopCom = () => {
 
   const { mutate: loginMutate } = useCustomMutation('post', '/user/login', {
     onSuccess: (data: ILoginResultType) => {
-      console.log('data', data);
       if (data.result === 'ok') {
         Api.addToken(data.detail.token);
         Api.addId(data.detail.id);
@@ -54,8 +53,8 @@ const LoginBoxTopCom = () => {
         setIsLogin(true);
       }
     },
-    onError: (error) => {
-      console.error(error);
+    onError: () => {
+      alert('다시 시도해 주세요.');
     },
   });
 

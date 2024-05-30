@@ -1,15 +1,20 @@
 import styled from '@emotion/styled';
+import { useEffect, useState } from 'react';
+import { useSetRecoilState } from 'recoil';
 import ResponsiveLayout from '@/layouts/ResponsiveLayout/ResponseiveLayout';
 import Scheduler from '@/components/main/Scheduler';
 import CharacterContainer from '@/components/main/CharacterContainer';
 import MandartHeader from '@/components/main/MandartHeader';
 import MandartMain from '@/components/main/MandartMain';
+import { GetLoginUser } from './api/auth/authApi';
+import AuthStore from '@/store/auth/authStore';
 
 const MainContainer = styled.div`
   display: flex;
   justify-content: center;
   width: 100%;
   height: 1100px;
+  margin-top: 30px;
   /* border: 1px solid black; */
 `;
 const SubContainer1 = styled.div`
@@ -46,7 +51,42 @@ const MandartContainer = styled.div`
   }
 `;
 
-export default function Main() {
+export const Main = () => {
+  const [id, setId] = useState<number | undefined>(undefined);
+  const setAuthData = useSetRecoilState(AuthStore);
+
+  useEffect(() => {
+    const storedId = localStorage.getItem('id');
+    if (storedId) {
+      setId(Number(storedId));
+    }
+  }, []);
+
+  const { data: LoginUserData } = GetLoginUser(
+    { id: Number(id) },
+    {
+      enabled: id !== undefined,
+      queryKey: ['user', { id: Number(id) }],
+    }
+  );
+
+  useEffect(() => {
+    if (LoginUserData) {
+      setAuthData({
+        isLogin: true,
+        id: LoginUserData.id,
+        email: LoginUserData.email,
+        nickname: LoginUserData.nickname,
+        createdAt: LoginUserData.createdAt,
+        updatedAt: LoginUserData.updatedAt,
+        level: LoginUserData.level,
+        exp: LoginUserData.exp,
+        mandalartExists: LoginUserData.mandalartExists,
+        mandalartId: LoginUserData.mandalartId,
+      });
+    }
+  }, [LoginUserData, setAuthData]);
+
   return (
     <ResponsiveLayout>
       <MainContainer>
@@ -63,4 +103,6 @@ export default function Main() {
       </MainContainer>
     </ResponsiveLayout>
   );
-}
+};
+
+export default Main;
